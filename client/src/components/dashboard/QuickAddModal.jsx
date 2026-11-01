@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Modal } from '../common/Modal';
 import { Button } from '../common/Button';
+import { notifyToast } from '../common/Toast';
 import { Droplets, UtensilsCrossed, Dumbbell, Footprints, Moon, Scale } from 'lucide-react';
 import { waterService } from '../../services/waterService';
 import { dailyLogService } from '../../services/dailyLogService';
@@ -49,10 +50,20 @@ export const QuickAddModal = ({ isOpen, onClose, onSuccess }) => {
           date: selectedDate,
           note: 'Quick add',
         });
+        notifyToast({
+          title: 'Hydration Logged! 💧',
+          message: `Added ${waterAmount} ml to your daily water intake.`,
+          type: 'success',
+        });
       } else if (activeTab === 'steps') {
         await dailyLogService.upsertDailyLog({
           date: selectedDate,
           steps: Number(stepCount),
+        });
+        notifyToast({
+          title: 'Steps Recorded! 🚶',
+          message: `Successfully logged ${Number(stepCount).toLocaleString()} steps for ${selectedDate}.`,
+          type: 'success',
         });
       } else if (activeTab === 'exercise') {
         await exerciseService.createExercise({
@@ -61,6 +72,11 @@ export const QuickAddModal = ({ isOpen, onClose, onSuccess }) => {
           category: exerciseCat,
           durationMinutes: Number(exerciseDuration),
         });
+        notifyToast({
+          title: 'Workout Saved! 🏋️',
+          message: `Recorded ${exerciseDuration} mins of ${exerciseName}.`,
+          type: 'success',
+        });
       } else if (activeTab === 'sleep') {
         await sleepService.logSleep({
           date: selectedDate,
@@ -68,10 +84,20 @@ export const QuickAddModal = ({ isOpen, onClose, onSuccess }) => {
           wakeTime,
           quality: sleepQuality,
         });
+        notifyToast({
+          title: 'Sleep Saved! 🌙',
+          message: `Logged sleep from ${bedtime} to ${wakeTime}.`,
+          type: 'success',
+        });
       } else if (activeTab === 'weight') {
         await weightService.logWeight({
           date: selectedDate,
           weightKg: Number(weightKg),
+        });
+        notifyToast({
+          title: 'Weight Logged! ⚖️',
+          message: `Logged ${weightKg} kg for ${selectedDate}.`,
+          type: 'success',
         });
       } else if (activeTab === 'food') {
         await mealService.createMeal({
@@ -89,12 +115,21 @@ export const QuickAddModal = ({ isOpen, onClose, onSuccess }) => {
             },
           ],
         });
+        notifyToast({
+          title: 'Meal Added! 🥗',
+          message: `Added ${mealName} (${mealCalories} kcal) to ${mealCategory}.`,
+          type: 'success',
+        });
       }
 
       if (onSuccess) onSuccess();
       onClose();
     } catch (err) {
-      alert(err.response?.data?.message || err.message || 'Error logging entry');
+      notifyToast({
+        title: 'Action Failed',
+        message: err.response?.data?.message || err.message || 'Error logging entry',
+        type: 'error',
+      });
     } finally {
       setLoading(false);
     }

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Card } from '../components/common/Card';
 import { Button } from '../components/common/Button';
+import { notifyToast } from '../components/common/Toast';
 import { HabitHeatmap } from '../components/charts/HabitHeatmap';
 import { habitService } from '../services/habitService';
 import { goalService } from '../services/goalService';
@@ -86,7 +87,11 @@ export const GoalsHabitsPage = () => {
       await habitService.toggleHabit(habitId, selectedDate);
       loadHabitsData();
     } catch (err) {
-      alert('Error toggling habit');
+      notifyToast({
+        title: 'Action Failed',
+        message: 'Error toggling habit',
+        type: 'error',
+      });
     }
   };
 
@@ -99,11 +104,20 @@ export const GoalsHabitsPage = () => {
         emoji: habitEmoji,
         targetDaysPerWeek: Number(habitTargetDays),
       });
+      notifyToast({
+        title: 'Habit Created! 🎯',
+        message: `Added habit "${habitEmoji} ${habitName}".`,
+        type: 'success',
+      });
       setHabitName('');
       setIsHabitModalOpen(false);
       loadHabitsData();
     } catch (err) {
-      alert('Error creating habit');
+      notifyToast({
+        title: 'Creation Failed',
+        message: 'Error creating habit',
+        type: 'error',
+      });
     }
   };
 
@@ -112,9 +126,18 @@ export const GoalsHabitsPage = () => {
     if (!window.confirm('Delete this habit?')) return;
     try {
       await habitService.deleteHabit(id);
+      notifyToast({
+        title: 'Habit Removed',
+        message: 'Habit deleted.',
+        type: 'info',
+      });
       loadHabitsData();
     } catch (err) {
-      alert('Error deleting habit');
+      notifyToast({
+        title: 'Action Failed',
+        message: 'Error deleting habit',
+        type: 'error',
+      });
     }
   };
 
@@ -131,10 +154,18 @@ export const GoalsHabitsPage = () => {
       });
       setIsSavingGoals(false);
       loadHabitsData();
-      alert('Daily targets updated successfully!');
+      notifyToast({
+        title: 'Daily Targets Saved! 🎯',
+        message: `Updated step goal (${Number(stepsGoal).toLocaleString()}), hydration (${waterGoal} ml) and calories.`,
+        type: 'success',
+      });
     } catch (err) {
       setIsSavingGoals(false);
-      alert('Error saving targets');
+      notifyToast({
+        title: 'Targets Update Failed',
+        message: err.response?.data?.message || 'Error saving targets',
+        type: 'error',
+      });
     }
   };
 

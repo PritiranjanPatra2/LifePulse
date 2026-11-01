@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Modal } from '../common/Modal';
 import { Button } from '../common/Button';
+import { notifyToast } from '../common/Toast';
 import { FOOD_CATEGORIES, EMOJI_PICKER_FOODS } from '../../constants/emojis';
 import { foodService } from '../../services/foodService';
 import { Search, Plus, Sparkles, Check, Trash2, Edit2 } from 'lucide-react';
@@ -121,9 +122,18 @@ export const FoodLibraryModal = ({
         setShowCustomForm(false);
         // Pre-select newly created custom food
         handleSelectFoodCard(res.data);
+        notifyToast({
+          title: 'Custom Food Created! 🥗',
+          message: `Created "${res.data.name}" with ${res.data.calories} kcal.`,
+          type: 'success',
+        });
       }
     } catch (err) {
-      alert(err.response?.data?.message || 'Error creating custom food');
+      notifyToast({
+        title: 'Food Creation Failed',
+        message: err.response?.data?.message || 'Error creating custom food',
+        type: 'error',
+      });
     } finally {
       setIsSubmittingCustom(false);
     }
@@ -136,8 +146,17 @@ export const FoodLibraryModal = ({
       await foodService.deleteFood(foodId);
       setFoods(foods.filter((f) => f._id !== foodId));
       if (activeFood?._id === foodId) setActiveFood(null);
+      notifyToast({
+        title: 'Food Item Removed',
+        message: 'Custom food deleted from library.',
+        type: 'info',
+      });
     } catch (err) {
-      alert(err.response?.data?.message || 'Could not delete food item');
+      notifyToast({
+        title: 'Delete Failed',
+        message: err.response?.data?.message || 'Could not delete food item',
+        type: 'error',
+      });
     }
   };
 

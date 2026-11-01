@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Card } from '../components/common/Card';
 import { Button } from '../components/common/Button';
+import { notifyToast } from '../components/common/Toast';
 import { MealCard } from '../components/nutrition/MealCard';
 import { FoodLibraryModal } from '../components/nutrition/FoodLibraryModal';
 import { MacroNutrientBar } from '../components/nutrition/MacroNutrientBar';
@@ -76,9 +77,18 @@ export const NutritionPage = () => {
           items: [foodItem],
         });
       }
+      notifyToast({
+        title: 'Food Added! 🥗',
+        message: `Added ${foodItem.name} to ${modalCategory}.`,
+        type: 'success',
+      });
       loadNutritionData();
     } catch (err) {
-      alert('Error adding food item');
+      notifyToast({
+        title: 'Action Failed',
+        message: 'Error adding food item',
+        type: 'error',
+      });
     }
   };
 
@@ -92,9 +102,18 @@ export const NutritionPage = () => {
       } else {
         await mealService.updateMeal(mealId, { items: updated });
       }
+      notifyToast({
+        title: 'Food Item Removed',
+        message: 'Item removed from meal.',
+        type: 'info',
+      });
       loadNutritionData();
     } catch (err) {
-      alert('Error removing food item');
+      notifyToast({
+        title: 'Action Failed',
+        message: 'Error removing food item',
+        type: 'error',
+      });
     }
   };
 
@@ -102,9 +121,18 @@ export const NutritionPage = () => {
     if (!window.confirm('Delete this entire meal?')) return;
     try {
       await mealService.deleteMeal(mealId);
+      notifyToast({
+        title: 'Meal Deleted',
+        message: 'Meal record removed.',
+        type: 'info',
+      });
       loadNutritionData();
     } catch (err) {
-      alert('Error deleting meal');
+      notifyToast({
+        title: 'Action Failed',
+        message: 'Error deleting meal',
+        type: 'error',
+      });
     }
   };
 

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { AVATAR_OPTIONS } from '../../constants/emojis';
 import { Check, UploadCloud, Loader2 } from 'lucide-react';
 import { uploadService } from '../../services/uploadService';
+import { notifyToast } from './Toast';
 
 export const AvatarPicker = ({ value, onChange }) => {
   const [isUploading, setIsUploading] = useState(false);
@@ -11,7 +12,11 @@ export const AvatarPicker = ({ value, onChange }) => {
     if (!file) return;
 
     if (file.size > 5 * 1024 * 1024) {
-      alert('Image size exceeds 5MB limit');
+      notifyToast({
+        title: 'File Too Large',
+        message: 'Image size exceeds 5MB limit',
+        type: 'error',
+      });
       return;
     }
 
@@ -22,9 +27,18 @@ export const AvatarPicker = ({ value, onChange }) => {
         const res = await uploadService.uploadAvatar(reader.result);
         if (res.avatarUrl) {
           onChange(res.avatarUrl);
+          notifyToast({
+            title: 'Avatar Uploaded! 📸',
+            message: 'Your photo was uploaded to Cloudinary successfully.',
+            type: 'success',
+          });
         }
       } catch (err) {
-        alert(err.response?.data?.message || 'Failed to upload photo to Cloudinary');
+        notifyToast({
+          title: 'Upload Failed',
+          message: err.response?.data?.message || 'Failed to upload photo to Cloudinary',
+          type: 'error',
+        });
       } finally {
         setIsUploading(false);
       }

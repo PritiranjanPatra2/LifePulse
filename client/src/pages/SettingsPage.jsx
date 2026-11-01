@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Card } from '../components/common/Card';
 import { Button } from '../components/common/Button';
+import { notifyToast } from '../components/common/Toast';
 import { AvatarPicker } from '../components/common/AvatarPicker';
 import { updateUserProfile } from '../store/authSlice';
 import { toggleTheme, setTheme } from '../store/themeSlice';
@@ -74,10 +75,18 @@ export const SettingsPage = () => {
         })
       );
       setIsUpdatingProfile(false);
-      alert('Profile updated successfully!');
+      notifyToast({
+        title: 'Profile Updated! 👤',
+        message: 'Your personal information has been saved.',
+        type: 'success',
+      });
     } catch (err) {
       setIsUpdatingProfile(false);
-      alert('Failed to update profile');
+      notifyToast({
+        title: 'Update Failed',
+        message: 'Failed to update profile',
+        type: 'error',
+      });
     }
   };
 
@@ -94,10 +103,18 @@ export const SettingsPage = () => {
         targetWeight: Number(targetWeight),
       });
       setIsSavingGoals(false);
-      alert('Targets updated successfully!');
+      notifyToast({
+        title: 'Targets Updated! 🎯',
+        message: `Step goal: ${Number(stepsGoal).toLocaleString()} | Water: ${waterGoal} ml`,
+        type: 'success',
+      });
     } catch (err) {
       setIsSavingGoals(false);
-      alert('Failed to save targets');
+      notifyToast({
+        title: 'Update Failed',
+        message: 'Failed to save targets',
+        type: 'error',
+      });
     }
   };
 

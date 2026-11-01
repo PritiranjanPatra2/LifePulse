@@ -6,6 +6,7 @@ import { ROUTES } from './constants/routes';
 
 // Layout
 import { MainLayout } from './layouts/MainLayout';
+import { ToastContainer } from './components/common/Toast';
 
 // Pages
 import { LoginPage } from './pages/LoginPage';
@@ -151,6 +152,7 @@ export const App = () => {
         {/* Catch-all redirect */}
         <Route path="*" element={<Navigate to={ROUTES.DASHBOARD} replace />} />
       </Routes>
+      <ToastContainer />
     </BrowserRouter>
   );
 };

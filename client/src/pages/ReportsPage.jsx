@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Card } from '../components/common/Card';
 import { Button } from '../components/common/Button';
+import { notifyToast } from '../components/common/Toast';
 import { analyticsService } from '../services/analyticsService';
 import { habitService } from '../services/habitService';
 import { CalorieBarChart } from '../components/charts/CalorieBarChart';
@@ -86,9 +87,18 @@ export const ReportsPage = () => {
       link.download = `LifePulse-Report-${timeRange}-${new Date().toISOString().split('T')[0]}-${resolution}x.png`;
       link.href = dataUrl;
       link.click();
+      notifyToast({
+        title: 'Report Exported! 📸',
+        message: `High-resolution ${resolution}x PNG downloaded successfully.`,
+        type: 'success',
+      });
     } catch (err) {
       console.error('Error capturing report PNG:', err);
-      alert('Failed to generate PNG image. Please try again.');
+      notifyToast({
+        title: 'Export Failed',
+        message: 'Failed to generate PNG image. Please try again.',
+        type: 'error',
+      });
     } finally {
       setIsExporting(false);
     }

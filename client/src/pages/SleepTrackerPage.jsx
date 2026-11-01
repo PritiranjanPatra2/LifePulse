@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Card } from '../components/common/Card';
 import { Button } from '../components/common/Button';
+import { notifyToast } from '../components/common/Toast';
 import { SleepAreaChart } from '../components/charts/SleepAreaChart';
 import { sleepService } from '../services/sleepService';
 import { goalService } from '../services/goalService';
@@ -85,9 +86,17 @@ export const SleepTrackerPage = () => {
         notes,
       });
       loadSleepData();
-      alert('Sleep record saved successfully!');
+      notifyToast({
+        title: 'Sleep Record Saved! 🌙',
+        message: `Logged sleep from ${bedtime} to ${wakeTime} (${quality}).`,
+        type: 'success',
+      });
     } catch (err) {
-      alert('Error logging sleep');
+      notifyToast({
+        title: 'Sleep Save Failed',
+        message: err.response?.data?.message || 'Error logging sleep',
+        type: 'error',
+      });
     }
   };
 

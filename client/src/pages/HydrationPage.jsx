@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Card } from '../components/common/Card';
 import { Button } from '../components/common/Button';
+import { notifyToast } from '../components/common/Toast';
 import { WaterBottle } from '../components/hydration/WaterBottle';
 import { WaterQuickAdd } from '../components/hydration/WaterQuickAdd';
 import { WaterHistory } from '../components/hydration/WaterHistory';
@@ -82,27 +83,54 @@ export const HydrationPage = () => {
         date: selectedDate,
         note,
       });
+      notifyToast({
+        title: 'Hydration Logged! 💧',
+        message: `Added ${amountMl} ml of water.`,
+        type: 'success',
+      });
       loadHydrationData();
     } catch (err) {
-      alert('Error recording water intake');
+      notifyToast({
+        title: 'Water Log Error',
+        message: 'Error recording water intake',
+        type: 'error',
+      });
     }
   };
 
   const handleDeleteLog = async (id) => {
     try {
       await waterService.deleteWater(id);
+      notifyToast({
+        title: 'Entry Deleted',
+        message: 'Water record deleted.',
+        type: 'info',
+      });
       loadHydrationData();
     } catch (err) {
-      alert('Error removing record');
+      notifyToast({
+        title: 'Action Failed',
+        message: 'Error removing record',
+        type: 'error',
+      });
     }
   };
 
   const handleUndo = async () => {
     try {
       await waterService.undoLastWater(selectedDate);
+      notifyToast({
+        title: 'Water Log Undone ↩️',
+        message: 'Reverted most recent water entry.',
+        type: 'info',
+      });
       loadHydrationData();
     } catch (err) {
-      alert('No water transactions to undo');
+      notifyToast({
+        title: 'Undo Failed',
+        message: 'No water transactions to undo',
+        type: 'error',
+      });
     }
   };
 
@@ -113,9 +141,18 @@ export const HydrationPage = () => {
         waterMl: Number(customTargetMl),
       });
       setIsTargetModalOpen(false);
+      notifyToast({
+        title: 'Water Goal Updated! 🎯',
+        message: `Daily target set to ${customTargetMl} ml.`,
+        type: 'success',
+      });
       loadHydrationData();
     } catch (err) {
-      alert('Error updating goal');
+      notifyToast({
+        title: 'Update Failed',
+        message: 'Error updating goal',
+        type: 'error',
+      });
     }
   };
 

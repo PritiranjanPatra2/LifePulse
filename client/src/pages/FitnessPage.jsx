@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Card } from '../components/common/Card';
 import { Button } from '../components/common/Button';
+import { notifyToast } from '../components/common/Toast';
 import { ExerciseDonutChart } from '../components/charts/ExerciseDonutChart';
 import { EXERCISE_CATEGORIES } from '../constants/emojis';
 import { exerciseService } from '../services/exerciseService';
@@ -73,19 +74,38 @@ export const FitnessPage = () => {
         notes,
       });
 
+      notifyToast({
+        title: 'Exercise Recorded! 🏋️',
+        message: `Logged ${durationMin} mins of ${activityName}.`,
+        type: 'success',
+      });
+
       setNotes('');
       loadFitnessData();
     } catch (err) {
-      alert('Error saving exercise');
+      notifyToast({
+        title: 'Exercise Failed',
+        message: err.response?.data?.message || 'Error saving exercise',
+        type: 'error',
+      });
     }
   };
 
   const handleDeleteExercise = async (id) => {
     try {
       await exerciseService.deleteExercise(id);
+      notifyToast({
+        title: 'Exercise Deleted',
+        message: 'Exercise session removed.',
+        type: 'info',
+      });
       loadFitnessData();
     } catch (err) {
-      alert('Error removing exercise');
+      notifyToast({
+        title: 'Action Failed',
+        message: 'Error removing exercise',
+        type: 'error',
+      });
     }
   };
 

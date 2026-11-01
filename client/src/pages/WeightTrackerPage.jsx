@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Card } from '../components/common/Card';
 import { Button } from '../components/common/Button';
+import { notifyToast } from '../components/common/Toast';
 import { WeightLineChart } from '../components/charts/WeightLineChart';
 import { weightService } from '../services/weightService';
 import { goalService } from '../services/goalService';
@@ -72,9 +73,17 @@ export const WeightTrackerPage = () => {
       });
       setNewNotes('');
       loadWeightData();
-      alert('Weight entry logged!');
+      notifyToast({
+        title: 'Weight Logged! ⚖️',
+        message: `Recorded ${newWeight} kg for ${newDate}.`,
+        type: 'success',
+      });
     } catch (err) {
-      alert('Error saving weight');
+      notifyToast({
+        title: 'Weight Save Failed',
+        message: err.response?.data?.message || 'Error saving weight',
+        type: 'error',
+      });
     }
   };
 
@@ -82,9 +91,18 @@ export const WeightTrackerPage = () => {
     if (!window.confirm('Delete this entry?')) return;
     try {
       await weightService.deleteWeightLog(id);
+      notifyToast({
+        title: 'Entry Deleted',
+        message: 'Weight record deleted.',
+        type: 'info',
+      });
       loadWeightData();
     } catch (err) {
-      alert('Error deleting entry');
+      notifyToast({
+        title: 'Action Failed',
+        message: 'Error deleting entry',
+        type: 'error',
+      });
     }
   };
 
@@ -97,8 +115,17 @@ export const WeightTrackerPage = () => {
       });
       setIsModalOpen(false);
       loadWeightData();
+      notifyToast({
+        title: 'Goals Updated! 🎯',
+        message: `Target weight set to ${targetWeightInput} kg.`,
+        type: 'success',
+      });
     } catch (err) {
-      alert('Error saving weight targets');
+      notifyToast({
+        title: 'Update Failed',
+        message: 'Error saving weight targets',
+        type: 'error',
+      });
     }
   };
 

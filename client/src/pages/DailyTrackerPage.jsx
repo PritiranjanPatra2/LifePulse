@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Card } from '../components/common/Card';
 import { Button } from '../components/common/Button';
+import { notifyToast } from '../components/common/Toast';
 import { WaterQuickAdd } from '../components/hydration/WaterQuickAdd';
 import { WaterHistory } from '../components/hydration/WaterHistory';
 import { FoodLibraryModal } from '../components/nutrition/FoodLibraryModal';
@@ -24,6 +25,7 @@ import {
   Plus,
   Trash2,
   Save,
+  Check,
   CheckCircle2,
 } from 'lucide-react';
 
@@ -55,6 +57,7 @@ export const DailyTrackerPage = () => {
   const [notesInput, setNotesInput] = useState('');
   const [moodInput, setMoodInput] = useState('good');
   const [isSavingDailyLog, setIsSavingDailyLog] = useState(false);
+  const [stepsSavedSuccess, setStepsSavedSuccess] = useState(false);
 
   // Sleep
   const [sleepLog, setSleepLog] = useState(null);
@@ -116,27 +119,54 @@ export const DailyTrackerPage = () => {
         date: selectedDate,
         note,
       });
+      notifyToast({
+        title: 'Water Logged! 💧',
+        message: `Added ${amountMl} ml for ${selectedDate}.`,
+        type: 'success',
+      });
       loadDateData();
     } catch (err) {
-      alert('Error logging water');
+      notifyToast({
+        title: 'Water Log Error',
+        message: err.response?.data?.message || 'Error logging water',
+        type: 'error',
+      });
     }
   };
 
   const handleDeleteWater = async (id) => {
     try {
       await waterService.deleteWater(id);
+      notifyToast({
+        title: 'Water Log Removed',
+        message: 'Deleted water entry.',
+        type: 'info',
+      });
       loadDateData();
     } catch (err) {
-      alert('Error removing water log');
+      notifyToast({
+        title: 'Action Failed',
+        message: 'Error removing water log',
+        type: 'error',
+      });
     }
   };
 
   const handleUndoWater = async () => {
     try {
       await waterService.undoLastWater(selectedDate);
+      notifyToast({
+        title: 'Water Log Undone ↩️',
+        message: 'Reverted most recent water entry.',
+        type: 'info',
+      });
       loadDateData();
     } catch (err) {
-      alert('Nothing to undo');
+      notifyToast({
+        title: 'Undo Failed',
+        message: 'Nothing to undo',
+        type: 'error',
+      });
     }
   };
 
@@ -164,9 +194,18 @@ export const DailyTrackerPage = () => {
           items: [foodItem],
         });
       }
+      notifyToast({
+        title: 'Food Item Added! 🥗',
+        message: `Added ${foodItem.name} to ${activeMealCategory}.`,
+        type: 'success',
+      });
       loadDateData();
     } catch (err) {
-      alert('Error adding food item to meal');
+      notifyToast({
+        title: 'Failed to Add Food',
+        message: 'Error adding food item to meal',
+        type: 'error',
+      });
     }
   };
 
@@ -181,9 +220,18 @@ export const DailyTrackerPage = () => {
       } else {
         await mealService.updateMeal(mealId, { items: updatedItems });
       }
+      notifyToast({
+        title: 'Item Removed',
+        message: 'Food item removed from meal.',
+        type: 'info',
+      });
       loadDateData();
     } catch (err) {
-      alert('Error removing food item');
+      notifyToast({
+        title: 'Action Failed',
+        message: 'Error removing food item',
+        type: 'error',
+      });
     }
   };
 
@@ -191,9 +239,18 @@ export const DailyTrackerPage = () => {
     if (!window.confirm('Delete this meal entry?')) return;
     try {
       await mealService.deleteMeal(mealId);
+      notifyToast({
+        title: 'Meal Deleted',
+        message: 'Meal removed from tracker.',
+        type: 'info',
+      });
       loadDateData();
     } catch (err) {
-      alert('Error deleting meal');
+      notifyToast({
+        title: 'Action Failed',
+        message: 'Error deleting meal',
+        type: 'error',
+      });
     }
   };
 
@@ -208,19 +265,37 @@ export const DailyTrackerPage = () => {
         category: newExCat,
         durationMinutes: Number(newExDur),
       });
+      notifyToast({
+        title: 'Exercise Logged! 🏋️',
+        message: `Added ${newExName} (${newExDur} mins) to today's activity.`,
+        type: 'success',
+      });
       setNewExName('');
       loadDateData();
     } catch (err) {
-      alert('Error creating exercise');
+      notifyToast({
+        title: 'Exercise Log Failed',
+        message: 'Error creating exercise',
+        type: 'error',
+      });
     }
   };
 
   const handleDeleteExercise = async (id) => {
     try {
       await exerciseService.deleteExercise(id);
+      notifyToast({
+        title: 'Exercise Deleted',
+        message: 'Activity removed.',
+        type: 'info',
+      });
       loadDateData();
     } catch (err) {
-      alert('Error removing exercise');
+      notifyToast({
+        title: 'Action Failed',
+        message: 'Error removing exercise',
+        type: 'error',
+      });
     }
   };
 
@@ -236,10 +311,21 @@ export const DailyTrackerPage = () => {
         overallMood: moodInput,
       });
       setIsSavingDailyLog(false);
+      setStepsSavedSuccess(true);
+      setTimeout(() => setStepsSavedSuccess(false), 3000);
+      notifyToast({
+        title: 'Steps & Daily Log Saved! 🚶',
+        message: `Successfully recorded ${Number(stepsInput).toLocaleString()} steps for ${selectedDate}.`,
+        type: 'success',
+      });
       loadDateData();
     } catch (err) {
       setIsSavingDailyLog(false);
-      alert('Error saving daily record');
+      notifyToast({
+        title: 'Error Saving Daily Log',
+        message: err.response?.data?.message || 'Could not save steps and notes.',
+        type: 'error',
+      });
     }
   };
 
@@ -253,9 +339,18 @@ export const DailyTrackerPage = () => {
         wakeTime,
         quality: sleepQuality,
       });
+      notifyToast({
+        title: 'Sleep Logged! 🌙',
+        message: `Saved sleep record: ${bedtime} to ${wakeTime}.`,
+        type: 'success',
+      });
       loadDateData();
     } catch (err) {
-      alert('Error saving sleep log');
+      notifyToast({
+        title: 'Sleep Save Failed',
+        message: err.response?.data?.message || 'Error saving sleep log',
+        type: 'error',
+      });
     }
   };
 
@@ -268,9 +363,18 @@ export const DailyTrackerPage = () => {
         date: selectedDate,
         weightKg: Number(weightKg),
       });
+      notifyToast({
+        title: 'Weight Logged! ⚖️',
+        message: `Recorded ${weightKg} kg for ${selectedDate}.`,
+        type: 'success',
+      });
       loadDateData();
     } catch (err) {
-      alert('Error logging weight');
+      notifyToast({
+        title: 'Weight Save Failed',
+        message: err.response?.data?.message || 'Error logging weight',
+        type: 'error',
+      });
     }
   };
 
@@ -571,9 +675,25 @@ export const DailyTrackerPage = () => {
                 />
               </div>
 
-              <div className="flex justify-end">
-                <Button type="submit" size="sm" isLoading={isSavingDailyLog} icon={Save}>
-                  Save Steps & Notes
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
+                {stepsSavedSuccess ? (
+                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-xs font-semibold animate-pulse">
+                    <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-500" />
+                    <span>{Number(stepsInput).toLocaleString()} steps saved successfully!</span>
+                  </div>
+                ) : (
+                  <span className="text-xs text-slate-400">
+                    Auto-calculates distance & daily progress
+                  </span>
+                )}
+                <Button
+                  type="submit"
+                  size="sm"
+                  isLoading={isSavingDailyLog}
+                  icon={stepsSavedSuccess ? Check : Save}
+                  className={stepsSavedSuccess ? '!bg-emerald-600 hover:!bg-emerald-500 text-white' : ''}
+                >
+                  {stepsSavedSuccess ? 'Saved!' : 'Save Steps & Notes'}
                 </Button>
               </div>
             </form>
