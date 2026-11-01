@@ -28,13 +28,18 @@ export const Navbar = ({ onOpenSidebar, onOpenQuickAdd }) => {
 
   const [showNotifications, setShowNotifications] = useState(false);
 
-  // Format date for display: "Sunday, Nov 1, 2026"
+  // Format date for display: "Sun, Nov 1, 2026" on desktop, clean compact on mobile
   const dateObj = new Date(selectedDate);
   const formattedDisplayDate = dateObj.toLocaleDateString('en-US', {
     weekday: 'short',
     month: 'short',
     day: 'numeric',
     year: 'numeric',
+  });
+
+  const mobileDisplayDate = dateObj.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
   });
 
   const isToday = selectedDate === new Date().toISOString().split('T')[0];
@@ -45,54 +50,62 @@ export const Navbar = ({ onOpenSidebar, onOpenQuickAdd }) => {
   ];
 
   return (
-    <header className="sticky top-0 z-30 h-18 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 px-4 sm:px-6 lg:px-8 flex items-center justify-between transition-colors">
+    <header className="sticky top-0 z-30 h-16 sm:h-18 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 px-2.5 sm:px-6 lg:px-8 flex items-center justify-between transition-colors">
       {/* Left: Mobile Menu Trigger + Date Navigator */}
-      <div className="flex items-center gap-3 sm:gap-4">
+      <div className="flex items-center gap-1.5 sm:gap-4 min-w-0">
         <button
           onClick={onOpenSidebar}
-          className="p-2 rounded-xl text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 lg:hidden"
+          className="p-2 rounded-xl text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 lg:hidden shrink-0"
         >
           <Menu className="w-5 h-5" />
         </button>
 
         {/* Date Selector Group */}
-        <div className="flex items-center bg-slate-100/80 dark:bg-slate-800/80 p-1 rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-inner">
+        <div className="flex items-center bg-slate-100/90 dark:bg-slate-800/90 p-0.5 sm:p-1 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 shadow-xs shrink-0">
           <button
             onClick={() => dispatch(goToPreviousDay())}
             title="Previous Day"
-            className="p-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 hover:shadow-xs transition-all"
+            className="p-1 sm:p-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 transition-all shrink-0"
           >
-            <ChevronLeft className="w-4 h-4" />
+            <ChevronLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
 
-          <div className="flex items-center gap-2 px-3 py-1">
-            <Calendar className="w-4 h-4 text-brand-500 shrink-0" />
-            <span className="text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-100 tracking-tight select-none">
+          <label className="relative flex items-center gap-1 sm:gap-2 px-1.5 sm:px-3 py-1 cursor-pointer select-none">
+            <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-brand-500 shrink-0" />
+            
+            {/* Mobile compact single-line label */}
+            <span className="sm:hidden text-xs font-bold text-slate-800 dark:text-slate-100 whitespace-nowrap">
+              {isToday ? 'Today' : mobileDisplayDate}
+            </span>
+
+            {/* Desktop full label */}
+            <span className="hidden sm:inline text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-100 tracking-tight whitespace-nowrap">
               {formattedDisplayDate}
             </span>
+
             <input
               type="date"
               value={selectedDate}
               onChange={(e) => {
                 if (e.target.value) dispatch(setSelectedDate(e.target.value));
               }}
-              className="w-4 h-4 opacity-0 absolute cursor-pointer"
+              className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
               title="Pick a custom date"
             />
-          </div>
+          </label>
 
           <button
             onClick={() => dispatch(goToNextDay())}
             title="Next Day"
-            className="p-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 hover:shadow-xs transition-all"
+            className="p-1 sm:p-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 transition-all shrink-0"
           >
-            <ChevronRight className="w-4 h-4" />
+            <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
 
           {!isToday && (
             <button
               onClick={() => dispatch(goToToday())}
-              className="text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-xl bg-brand-500 text-white ml-1 hover:bg-brand-600 transition-colors shadow-xs"
+              className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-xl bg-brand-500 text-white ml-0.5 sm:ml-1 hover:bg-brand-600 transition-colors shadow-xs shrink-0 whitespace-nowrap"
             >
               Today
             </button>

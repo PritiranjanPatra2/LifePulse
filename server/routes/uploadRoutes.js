@@ -72,3 +72,4 @@ router.post('/avatar', protect, async (req, res, next) => {
 });
 
 module.exports = router;
+

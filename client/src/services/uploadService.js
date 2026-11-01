@@ -11,3 +11,4 @@ export const uploadService = {
     return res.data;
   },
 };
+
