@@ -12,6 +12,7 @@ export const AvatarPicker = ({ value, onChange }) => {
     if (!file) return;
 
     if (file.size > 5 * 1024 * 1024) {
+      alert('Image size exceeds 5MB limit');
       notifyToast({
         title: 'File Too Large',
         message: 'Image size exceeds 5MB limit',
@@ -27,6 +28,7 @@ export const AvatarPicker = ({ value, onChange }) => {
         const res = await uploadService.uploadAvatar(reader.result);
         if (res.avatarUrl) {
           onChange(res.avatarUrl);
+          alert('Photo uploaded to Cloudinary successfully!');
           notifyToast({
             title: 'Avatar Uploaded! 📸',
             message: 'Your photo was uploaded to Cloudinary successfully.',
@@ -34,6 +36,7 @@ export const AvatarPicker = ({ value, onChange }) => {
           });
         }
       } catch (err) {
+        alert(err.response?.data?.message || 'Failed to upload photo to Cloudinary');
         notifyToast({
           title: 'Upload Failed',
           message: err.response?.data?.message || 'Failed to upload photo to Cloudinary',

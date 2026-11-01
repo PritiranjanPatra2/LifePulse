@@ -77,6 +77,7 @@ export const NutritionPage = () => {
           items: [foodItem],
         });
       }
+      alert(`${foodItem.name} added to ${modalCategory} successfully!`);
       notifyToast({
         title: 'Food Added! 🥗',
         message: `Added ${foodItem.name} to ${modalCategory}.`,
@@ -84,6 +85,7 @@ export const NutritionPage = () => {
       });
       loadNutritionData();
     } catch (err) {
+      alert('Error adding food item');
       notifyToast({
         title: 'Action Failed',
         message: 'Error adding food item',

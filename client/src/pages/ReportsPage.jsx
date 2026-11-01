@@ -94,6 +94,7 @@ export const ReportsPage = () => {
       });
     } catch (err) {
       console.error('Error capturing report PNG:', err);
+      alert('Failed to generate PNG image. Please try again.');
       notifyToast({
         title: 'Export Failed',
         message: 'Failed to generate PNG image. Please try again.',

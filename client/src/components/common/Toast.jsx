@@ -32,7 +32,7 @@ export const ToastContainer = () => {
   };
 
   return (
-    <div className="fixed top-20 right-4 sm:right-6 z-50 flex flex-col gap-2.5 max-w-sm w-full pointer-events-none">
+    <div className="fixed top-20 right-4 sm:right-6 z-[9999] flex flex-col gap-2.5 max-w-sm w-full pointer-events-none">
       <AnimatePresence>
         {toasts.map((toast) => {
           const isSuccess = toast.type === 'success';

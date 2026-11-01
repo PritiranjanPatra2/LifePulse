@@ -154,6 +154,7 @@ export const GoalsHabitsPage = () => {
       });
       setIsSavingGoals(false);
       loadHabitsData();
+      alert('Daily targets updated successfully!');
       notifyToast({
         title: 'Daily Targets Saved! 🎯',
         message: `Updated step goal (${Number(stepsGoal).toLocaleString()}), hydration (${waterGoal} ml) and calories.`,
@@ -161,6 +162,7 @@ export const GoalsHabitsPage = () => {
       });
     } catch (err) {
       setIsSavingGoals(false);
+      alert(err.response?.data?.message || 'Error saving targets');
       notifyToast({
         title: 'Targets Update Failed',
         message: err.response?.data?.message || 'Error saving targets',

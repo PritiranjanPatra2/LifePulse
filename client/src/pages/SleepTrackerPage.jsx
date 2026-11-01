@@ -86,6 +86,7 @@ export const SleepTrackerPage = () => {
         notes,
       });
       loadSleepData();
+      alert('Sleep record saved successfully!');
       notifyToast({
         title: 'Sleep Record Saved! 🌙',
         message: `Logged sleep from ${bedtime} to ${wakeTime} (${quality}).`,

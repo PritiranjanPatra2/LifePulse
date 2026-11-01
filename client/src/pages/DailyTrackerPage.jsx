@@ -119,6 +119,7 @@ export const DailyTrackerPage = () => {
         date: selectedDate,
         note,
       });
+      alert(`Water intake of ${amountMl} ml logged successfully!`);
       notifyToast({
         title: 'Water Logged! 💧',
         message: `Added ${amountMl} ml for ${selectedDate}.`,
@@ -126,6 +127,7 @@ export const DailyTrackerPage = () => {
       });
       loadDateData();
     } catch (err) {
+      alert('Error logging water');
       notifyToast({
         title: 'Water Log Error',
         message: err.response?.data?.message || 'Error logging water',
@@ -265,6 +267,7 @@ export const DailyTrackerPage = () => {
         category: newExCat,
         durationMinutes: Number(newExDur),
       });
+      alert(`Exercise "${newExName}" (${newExDur} mins) logged successfully!`);
       notifyToast({
         title: 'Exercise Logged! 🏋️',
         message: `Added ${newExName} (${newExDur} mins) to today's activity.`,
@@ -273,6 +276,7 @@ export const DailyTrackerPage = () => {
       setNewExName('');
       loadDateData();
     } catch (err) {
+      alert('Error creating exercise');
       notifyToast({
         title: 'Exercise Log Failed',
         message: 'Error creating exercise',
@@ -313,6 +317,7 @@ export const DailyTrackerPage = () => {
       setIsSavingDailyLog(false);
       setStepsSavedSuccess(true);
       setTimeout(() => setStepsSavedSuccess(false), 3000);
+      alert(`Steps saved successfully! Recorded ${Number(stepsInput).toLocaleString()} steps for ${selectedDate}.`);
       notifyToast({
         title: 'Steps & Daily Log Saved! 🚶',
         message: `Successfully recorded ${Number(stepsInput).toLocaleString()} steps for ${selectedDate}.`,
@@ -321,6 +326,7 @@ export const DailyTrackerPage = () => {
       loadDateData();
     } catch (err) {
       setIsSavingDailyLog(false);
+      alert(err.response?.data?.message || 'Error saving steps and daily record');
       notifyToast({
         title: 'Error Saving Daily Log',
         message: err.response?.data?.message || 'Could not save steps and notes.',
@@ -339,6 +345,7 @@ export const DailyTrackerPage = () => {
         wakeTime,
         quality: sleepQuality,
       });
+      alert('Sleep record saved successfully!');
       notifyToast({
         title: 'Sleep Logged! 🌙',
         message: `Saved sleep record: ${bedtime} to ${wakeTime}.`,
@@ -346,6 +353,7 @@ export const DailyTrackerPage = () => {
       });
       loadDateData();
     } catch (err) {
+      alert(err.response?.data?.message || 'Error saving sleep log');
       notifyToast({
         title: 'Sleep Save Failed',
         message: err.response?.data?.message || 'Error saving sleep log',
@@ -363,6 +371,7 @@ export const DailyTrackerPage = () => {
         date: selectedDate,
         weightKg: Number(weightKg),
       });
+      alert(`Weight entry (${weightKg} kg) saved successfully!`);
       notifyToast({
         title: 'Weight Logged! ⚖️',
         message: `Recorded ${weightKg} kg for ${selectedDate}.`,
@@ -370,6 +379,7 @@ export const DailyTrackerPage = () => {
       });
       loadDateData();
     } catch (err) {
+      alert(err.response?.data?.message || 'Error logging weight');
       notifyToast({
         title: 'Weight Save Failed',
         message: err.response?.data?.message || 'Error logging weight',

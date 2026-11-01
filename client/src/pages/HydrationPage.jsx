@@ -83,6 +83,7 @@ export const HydrationPage = () => {
         date: selectedDate,
         note,
       });
+      alert(`Water intake of ${amountMl} ml recorded successfully!`);
       notifyToast({
         title: 'Hydration Logged! 💧',
         message: `Added ${amountMl} ml of water.`,
@@ -90,6 +91,7 @@ export const HydrationPage = () => {
       });
       loadHydrationData();
     } catch (err) {
+      alert('Error recording water intake');
       notifyToast({
         title: 'Water Log Error',
         message: 'Error recording water intake',
@@ -141,6 +143,7 @@ export const HydrationPage = () => {
         waterMl: Number(customTargetMl),
       });
       setIsTargetModalOpen(false);
+      alert(`Water target updated to ${customTargetMl} ml!`);
       notifyToast({
         title: 'Water Goal Updated! 🎯',
         message: `Daily target set to ${customTargetMl} ml.`,
@@ -148,6 +151,7 @@ export const HydrationPage = () => {
       });
       loadHydrationData();
     } catch (err) {
+      alert('Error updating water goal');
       notifyToast({
         title: 'Update Failed',
         message: 'Error updating goal',

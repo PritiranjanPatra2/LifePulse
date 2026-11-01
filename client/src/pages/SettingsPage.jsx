@@ -75,6 +75,7 @@ export const SettingsPage = () => {
         })
       );
       setIsUpdatingProfile(false);
+      alert('Profile updated successfully!');
       notifyToast({
         title: 'Profile Updated! 👤',
         message: 'Your personal information has been saved.',
@@ -82,6 +83,7 @@ export const SettingsPage = () => {
       });
     } catch (err) {
       setIsUpdatingProfile(false);
+      alert('Failed to update profile');
       notifyToast({
         title: 'Update Failed',
         message: 'Failed to update profile',
@@ -103,6 +105,7 @@ export const SettingsPage = () => {
         targetWeight: Number(targetWeight),
       });
       setIsSavingGoals(false);
+      alert('Targets updated successfully!');
       notifyToast({
         title: 'Targets Updated! 🎯',
         message: `Step goal: ${Number(stepsGoal).toLocaleString()} | Water: ${waterGoal} ml`,
@@ -110,6 +113,7 @@ export const SettingsPage = () => {
       });
     } catch (err) {
       setIsSavingGoals(false);
+      alert('Failed to save targets');
       notifyToast({
         title: 'Update Failed',
         message: 'Failed to save targets',

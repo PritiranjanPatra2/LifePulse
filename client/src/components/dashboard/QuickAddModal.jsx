@@ -50,6 +50,7 @@ export const QuickAddModal = ({ isOpen, onClose, onSuccess }) => {
           date: selectedDate,
           note: 'Quick add',
         });
+        alert(`Hydration logged successfully! Added ${waterAmount} ml.`);
         notifyToast({
           title: 'Hydration Logged! 💧',
           message: `Added ${waterAmount} ml to your daily water intake.`,
@@ -60,6 +61,7 @@ export const QuickAddModal = ({ isOpen, onClose, onSuccess }) => {
           date: selectedDate,
           steps: Number(stepCount),
         });
+        alert(`Steps recorded successfully! Logged ${Number(stepCount).toLocaleString()} steps for ${selectedDate}.`);
         notifyToast({
           title: 'Steps Recorded! 🚶',
           message: `Successfully logged ${Number(stepCount).toLocaleString()} steps for ${selectedDate}.`,
@@ -72,6 +74,7 @@ export const QuickAddModal = ({ isOpen, onClose, onSuccess }) => {
           category: exerciseCat,
           durationMinutes: Number(exerciseDuration),
         });
+        alert(`Workout saved successfully! Recorded ${exerciseDuration} mins of ${exerciseName}.`);
         notifyToast({
           title: 'Workout Saved! 🏋️',
           message: `Recorded ${exerciseDuration} mins of ${exerciseName}.`,
@@ -84,6 +87,7 @@ export const QuickAddModal = ({ isOpen, onClose, onSuccess }) => {
           wakeTime,
           quality: sleepQuality,
         });
+        alert(`Sleep saved successfully! Logged sleep from ${bedtime} to ${wakeTime}.`);
         notifyToast({
           title: 'Sleep Saved! 🌙',
           message: `Logged sleep from ${bedtime} to ${wakeTime}.`,
@@ -94,6 +98,7 @@ export const QuickAddModal = ({ isOpen, onClose, onSuccess }) => {
           date: selectedDate,
           weightKg: Number(weightKg),
         });
+        alert(`Weight entry (${weightKg} kg) logged successfully!`);
         notifyToast({
           title: 'Weight Logged! ⚖️',
           message: `Logged ${weightKg} kg for ${selectedDate}.`,
@@ -115,6 +120,7 @@ export const QuickAddModal = ({ isOpen, onClose, onSuccess }) => {
             },
           ],
         });
+        alert(`Meal added successfully! Added ${mealName} (${mealCalories} kcal) to ${mealCategory}.`);
         notifyToast({
           title: 'Meal Added! 🥗',
           message: `Added ${mealName} (${mealCalories} kcal) to ${mealCategory}.`,
@@ -125,6 +131,7 @@ export const QuickAddModal = ({ isOpen, onClose, onSuccess }) => {
       if (onSuccess) onSuccess();
       onClose();
     } catch (err) {
+      alert(err.response?.data?.message || err.message || 'Error logging entry');
       notifyToast({
         title: 'Action Failed',
         message: err.response?.data?.message || err.message || 'Error logging entry',

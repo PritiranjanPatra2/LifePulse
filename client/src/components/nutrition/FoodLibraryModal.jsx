@@ -122,6 +122,7 @@ export const FoodLibraryModal = ({
         setShowCustomForm(false);
         // Pre-select newly created custom food
         handleSelectFoodCard(res.data);
+        alert(`Custom food "${res.data.name}" created successfully!`);
         notifyToast({
           title: 'Custom Food Created! 🥗',
           message: `Created "${res.data.name}" with ${res.data.calories} kcal.`,
@@ -129,6 +130,7 @@ export const FoodLibraryModal = ({
         });
       }
     } catch (err) {
+      alert(err.response?.data?.message || 'Error creating custom food');
       notifyToast({
         title: 'Food Creation Failed',
         message: err.response?.data?.message || 'Error creating custom food',

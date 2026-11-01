@@ -73,12 +73,14 @@ export const WeightTrackerPage = () => {
       });
       setNewNotes('');
       loadWeightData();
+      alert('Weight entry logged!');
       notifyToast({
         title: 'Weight Logged! ⚖️',
         message: `Recorded ${newWeight} kg for ${newDate}.`,
         type: 'success',
       });
     } catch (err) {
+      alert('Error saving weight');
       notifyToast({
         title: 'Weight Save Failed',
         message: err.response?.data?.message || 'Error saving weight',
@@ -98,6 +100,7 @@ export const WeightTrackerPage = () => {
       });
       loadWeightData();
     } catch (err) {
+      alert('Error deleting entry');
       notifyToast({
         title: 'Action Failed',
         message: 'Error deleting entry',
@@ -115,12 +118,14 @@ export const WeightTrackerPage = () => {
       });
       setIsModalOpen(false);
       loadWeightData();
+      alert('Weight targets updated successfully!');
       notifyToast({
         title: 'Goals Updated! 🎯',
         message: `Target weight set to ${targetWeightInput} kg.`,
         type: 'success',
       });
     } catch (err) {
+      alert('Error saving weight targets');
       notifyToast({
         title: 'Update Failed',
         message: 'Error saving weight targets',

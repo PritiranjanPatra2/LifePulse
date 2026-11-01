@@ -74,6 +74,7 @@ export const FitnessPage = () => {
         notes,
       });
 
+      alert(`Exercise "${activityName}" (${durationMin} mins) saved successfully!`);
       notifyToast({
         title: 'Exercise Recorded! 🏋️',
         message: `Logged ${durationMin} mins of ${activityName}.`,
@@ -83,6 +84,7 @@ export const FitnessPage = () => {
       setNotes('');
       loadFitnessData();
     } catch (err) {
+      alert(err.response?.data?.message || 'Error saving exercise');
       notifyToast({
         title: 'Exercise Failed',
         message: err.response?.data?.message || 'Error saving exercise',
