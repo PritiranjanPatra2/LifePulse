@@ -145,3 +145,4 @@ module.exports = {
   deleteWeightLog,
   getWeightSummary,
 };
+

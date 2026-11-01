@@ -11,3 +11,4 @@ export const goalService = {
     return res.data;
   },
 };
+

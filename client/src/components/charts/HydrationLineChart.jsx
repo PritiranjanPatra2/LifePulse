@@ -62,3 +62,4 @@ export const HydrationLineChart = ({ data = [], target = 4000, height = 280 }) =
     </div>
   );
 };
+

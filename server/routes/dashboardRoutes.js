@@ -6,3 +6,4 @@ const { protect } = require('../middleware/auth');
 router.get('/:date', protect, getDashboardData);
 
 module.exports = router;
+

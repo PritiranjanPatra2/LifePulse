@@ -44,3 +44,4 @@ export const NutritionPieChart = ({ data = [], height = 280 }) => {
     </div>
   );
 };
+

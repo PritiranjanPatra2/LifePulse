@@ -70,3 +70,4 @@ const ExerciseSchema = new mongoose.Schema(
 ExerciseSchema.index({ user: 1, date: 1, category: 1 });
 
 module.exports = mongoose.model('Exercise', ExerciseSchema);
+

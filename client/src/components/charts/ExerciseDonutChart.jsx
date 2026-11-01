@@ -43,3 +43,4 @@ export const ExerciseDonutChart = ({ data = [], height = 280 }) => {
     </div>
   );
 };
+

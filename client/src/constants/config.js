@@ -12,3 +12,4 @@ export const DEFAULT_GOALS = {
   targetWeight: 68,
   startingWeight: 72,
 };
+

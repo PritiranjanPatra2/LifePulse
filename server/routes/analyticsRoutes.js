@@ -10,3 +10,4 @@ router.get('/overview', getAnalyticsOverview);
 router.get('/insights', getSmartInsights);
 
 module.exports = router;
+

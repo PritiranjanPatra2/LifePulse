@@ -21,3 +21,4 @@ export const foodService = {
     return res.data;
   },
 };
+

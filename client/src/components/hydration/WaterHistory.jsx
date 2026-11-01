@@ -58,3 +58,4 @@ export const WaterHistory = ({ logs = [], onDeleteLog }) => {
     </div>
   );
 };
+

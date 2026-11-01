@@ -22,3 +22,4 @@ export const CardSkeleton = () => (
     <Skeleton className="w-full h-2 rounded-full" />
   </div>
 );
+

@@ -136,9 +136,17 @@ export const Sidebar = ({ isOpen, onClose }) => {
         <div className="p-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/40">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3 min-w-0">
-              <div className="w-9 h-9 rounded-xl bg-brand-500/10 dark:bg-brand-500/20 text-brand-600 dark:text-brand-400 flex items-center justify-center text-lg shrink-0">
-                👤
-              </div>
+              {user?.avatar && user.avatar.startsWith('http') ? (
+                <img
+                  src={user.avatar}
+                  alt={user.name}
+                  className="w-9 h-9 rounded-xl object-cover ring-1 ring-brand-500 shrink-0"
+                />
+              ) : (
+                <div className="w-9 h-9 rounded-xl bg-brand-500/10 dark:bg-brand-500/20 text-brand-600 dark:text-brand-400 flex items-center justify-center text-lg shrink-0">
+                  👤
+                </div>
+              )}
               <div className="min-w-0">
                 <p className="text-sm font-semibold text-slate-800 dark:text-slate-200 truncate">
                   {user?.name || 'LifePulse User'}
@@ -161,3 +169,4 @@ export const Sidebar = ({ isOpen, onClose }) => {
     </>
   );
 };
+

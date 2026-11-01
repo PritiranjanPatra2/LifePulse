@@ -21,3 +21,4 @@ export const weightService = {
     return res.data;
   },
 };
+

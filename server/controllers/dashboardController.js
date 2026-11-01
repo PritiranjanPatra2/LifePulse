@@ -279,3 +279,4 @@ const getDashboardData = async (req, res, next) => {
 module.exports = {
   getDashboardData,
 };
+

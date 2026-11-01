@@ -54,3 +54,4 @@ export const CalorieBarChart = ({ data = [], target = 2200, height = 280 }) => {
     </div>
   );
 };
+

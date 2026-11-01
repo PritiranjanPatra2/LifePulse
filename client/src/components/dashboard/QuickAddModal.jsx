@@ -377,3 +377,4 @@ export const QuickAddModal = ({ isOpen, onClose, onSuccess }) => {
     </Modal>
   );
 };
+

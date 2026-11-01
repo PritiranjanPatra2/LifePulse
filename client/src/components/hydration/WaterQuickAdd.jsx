@@ -86,3 +86,4 @@ export const WaterQuickAdd = ({ onAddWater, onUndo, canUndo = false, isLoading =
     </div>
   );
 };
+

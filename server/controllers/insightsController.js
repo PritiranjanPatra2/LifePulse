@@ -190,3 +190,4 @@ const getSmartInsights = async (req, res, next) => {
 module.exports = {
   getSmartInsights,
 };
+

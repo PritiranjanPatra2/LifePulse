@@ -53,3 +53,4 @@ export const StackedMealBarChart = ({ data = [], height = 300 }) => {
     </div>
   );
 };
+

@@ -59,3 +59,4 @@ export const WeightLineChart = ({ data = [], target = 68, height = 280 }) => {
     </div>
   );
 };
+

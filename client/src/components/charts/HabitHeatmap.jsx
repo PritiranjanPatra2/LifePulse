@@ -40,3 +40,4 @@ export const HabitHeatmap = ({ data = [], days = 60 }) => {
     </div>
   );
 };
+

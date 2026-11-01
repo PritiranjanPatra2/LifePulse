@@ -80,3 +80,4 @@ const FoodSchema = new mongoose.Schema(
 FoodSchema.index({ name: 'text', category: 1 });
 
 module.exports = mongoose.model('Food', FoodSchema);
+

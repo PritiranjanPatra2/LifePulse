@@ -54,3 +54,4 @@ export const StepsBarChart = ({ data = [], target = 10000, height = 280 }) => {
     </div>
   );
 };
+

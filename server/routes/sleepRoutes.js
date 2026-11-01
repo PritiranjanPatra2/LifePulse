@@ -16,3 +16,4 @@ router.route('/')
 router.delete('/:id', deleteSleepLog);
 
 module.exports = router;
+

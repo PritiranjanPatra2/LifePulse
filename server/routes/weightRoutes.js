@@ -19,3 +19,4 @@ router.route('/')
 router.delete('/:id', deleteWeightLog);
 
 module.exports = router;
+

@@ -183,9 +183,17 @@ export const Navbar = ({ onOpenSidebar, onOpenQuickAdd }) => {
 
         {/* User Pill */}
         <div className="hidden md:flex items-center gap-2.5 pl-2 border-l border-slate-200 dark:border-slate-800">
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-brand-500 to-cyan-400 text-white flex items-center justify-center font-bold text-xs shadow-xs">
-            {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
-          </div>
+          {user?.avatar && user.avatar.startsWith('http') ? (
+            <img
+              src={user.avatar}
+              alt={user.name}
+              className="w-8 h-8 rounded-xl object-cover ring-1 ring-brand-500"
+            />
+          ) : (
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-brand-500 to-cyan-400 text-white flex items-center justify-center font-bold text-xs shadow-xs">
+              {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
+            </div>
+          )}
           <div className="text-left">
             <span className="text-xs font-semibold text-slate-800 dark:text-slate-200 block leading-tight truncate max-w-[100px]">
               {user?.name || 'User'}
@@ -199,3 +207,4 @@ export const Navbar = ({ onOpenSidebar, onOpenQuickAdd }) => {
     </header>
   );
 };
+

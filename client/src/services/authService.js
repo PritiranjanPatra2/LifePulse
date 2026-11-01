@@ -37,3 +37,4 @@ export const authService = {
     localStorage.removeItem('lifepulse_user');
   },
 };
+

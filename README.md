@@ -205,3 +205,4 @@ LifePulse/
 - All queries enforce user isolation; no user can view or modify records belonging to other users.
 - Passwords are encrypted using bcrypt with salt rounds.
 - JWT tokens are validated through authorization middleware on all private API endpoints.
+

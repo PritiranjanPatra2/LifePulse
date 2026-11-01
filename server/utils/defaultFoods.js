@@ -446,3 +446,4 @@ const defaultFoods = [
 ];
 
 module.exports = defaultFoods;
+

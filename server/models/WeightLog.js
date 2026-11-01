@@ -36,3 +36,4 @@ const WeightLogSchema = new mongoose.Schema(
 WeightLogSchema.index({ user: 1, date: 1 });
 
 module.exports = mongoose.model('WeightLog', WeightLogSchema);
+

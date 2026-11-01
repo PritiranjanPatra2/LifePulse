@@ -56,3 +56,4 @@ export const GoalProgressChart = ({ data = [], height = 280 }) => {
     </div>
   );
 };
+

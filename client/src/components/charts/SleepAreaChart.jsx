@@ -63,3 +63,4 @@ export const SleepAreaChart = ({ data = [], target = 8, height = 280 }) => {
     </div>
   );
 };
+

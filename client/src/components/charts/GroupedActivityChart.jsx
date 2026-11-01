@@ -48,3 +48,4 @@ export const GroupedActivityChart = ({ data = [], height = 300 }) => {
     </div>
   );
 };
+

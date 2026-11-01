@@ -55,3 +55,4 @@ export const LifestyleRadarChart = ({ data = [], height = 300 }) => {
     </div>
   );
 };
+

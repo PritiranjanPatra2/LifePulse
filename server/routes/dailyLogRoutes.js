@@ -13,3 +13,4 @@ router.route('/')
   .post(upsertDailyLog);
 
 module.exports = router;
+
