@@ -1,0 +1,29 @@
+{
+  "name": "lifepulse-root",
+  "version": "1.0.0",
+  "description": "LifePulse – Personal Lifestyle Analytics Dashboard (Master Full-Stack Application)",
+  "private": true,
+  "scripts": {
+    "server": "npm --prefix server start",
+    "server:dev": "npm --prefix server run dev",
+    "client": "npm --prefix client run dev",
+    "client:build": "npm --prefix client run build",
+    "seed": "npm --prefix server run seed",
+    "start": "npm --prefix server start",
+    "build": "npm --prefix client run build"
+  },
+  "keywords": [
+    "lifestyle",
+    "analytics",
+    "dashboard",
+    "fitness",
+    "nutrition",
+    "hydration",
+    "power-bi",
+    "react",
+    "express",
+    "mongodb"
+  ],
+  "author": "LifePulse Team",
+  "license": "ISC"
+}
