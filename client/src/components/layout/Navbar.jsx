@@ -37,6 +37,22 @@ export const Navbar = ({ onOpenSidebar, onOpenQuickAdd }) => {
   const [showNotifications, setShowNotifications] = useState(false);
   const notifRef = useRef(null);
 
+  // Format date for display: "Sun, Nov 1, 2026" on desktop, clean compact on mobile
+  const dateObj = new Date(selectedDate);
+  const formattedDisplayDate = dateObj.toLocaleDateString('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+
+  const mobileDisplayDate = dateObj.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+  });
+
+  const isToday = selectedDate === new Date().toISOString().split('T')[0];
+
   // Storage key isolated per user
   const storageKey = `lifepulse_notifications_${user?._id || 'guest'}`;
 
