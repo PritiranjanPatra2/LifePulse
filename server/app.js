@@ -22,8 +22,30 @@ const uploadRoutes = require('./routes/uploadRoutes');
 
 const app = express();
 
-// Middleware with 10mb limit for Cloudinary image uploads
-app.use(cors());
+// Allowed origins including deployed frontend on Vercel
+const allowedOrigins = [
+  'https://life-pulse-sepia.vercel.app',
+  'http://localhost:5173',
+  'http://localhost:3000',
+  process.env.CLIENT_URL,
+].filter(Boolean);
+
+// CORS configuration supporting credentials and Vercel domains
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      const isAllowed =
+        allowedOrigins.includes(origin) ||
+        origin.endsWith('.vercel.app');
+      if (isAllowed) {
+        return callback(null, true);
+      }
+      return callback(null, true);
+    },
+    credentials: true,
+  })
+);
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
