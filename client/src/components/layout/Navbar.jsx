@@ -27,6 +27,7 @@ import {
 } from '../../store/dateSlice';
 import { toggleTheme } from '../../store/themeSlice';
 import { Button } from '../common/Button';
+import { PWAInstallButton } from '../common/PWAInstallButton';
 
 export const Navbar = ({ onOpenSidebar, onOpenQuickAdd }) => {
   const dispatch = useDispatch();
@@ -281,6 +282,9 @@ export const Navbar = ({ onOpenSidebar, onOpenQuickAdd }) => {
 
       {/* Right: Quick-Add, Notifications, Theme Toggle, User Profile */}
       <div className="flex items-center gap-2 sm:gap-3">
+        {/* Install PWA App Button */}
+        <PWAInstallButton variant="navbar" />
+
         {/* Quick Add Button */}
         <Button
           onClick={onOpenQuickAdd}

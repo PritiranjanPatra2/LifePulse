@@ -1,0 +1,55 @@
+{
+  "short_name": "LifePulse",
+  "name": "LifePulse – Personal Lifestyle Analytics Dashboard",
+  "description": "Track your daily food, water intake, exercise, walking steps, sleep, and lifestyle habits with real-time visual analytics.",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any"
+    }
+  ],
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#1ea678",
+  "background_color": "#080d1a",
+  "categories": ["health", "fitness", "lifestyle", "productivity"],
+  "shortcuts": [
+    {
+      "name": "Daily Tracker",
+      "short_name": "Tracker",
+      "description": "Log your daily food, steps and water",
+      "url": "/daily-tracker",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Hydration Bottle",
+      "short_name": "Hydration",
+      "description": "Monitor your animated water bottle",
+      "url": "/hydration",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Analytics & Trends",
+      "short_name": "Analytics",
+      "description": "Check weekly and monthly charts",
+      "url": "/analytics",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}
+

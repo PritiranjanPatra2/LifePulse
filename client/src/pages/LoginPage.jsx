@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loginUser, clearAuthError } from '../store/authSlice';
 import { Activity, Mail, Lock, ArrowRight, Sparkles } from 'lucide-react';
 import { Button } from '../components/common/Button';
+import { PWAInstallButton } from '../components/common/PWAInstallButton';
 import { ROUTES } from '../constants/routes';
 
 export const LoginPage = () => {
@@ -129,6 +130,11 @@ export const LoginPage = () => {
             Create your account
           </Link>
         </p>
+
+        {/* PWA Install Card on Login */}
+        <div className="mt-6 pt-5 border-t border-slate-800/80">
+          <PWAInstallButton variant="sidebar" />
+        </div>
       </div>
     </div>
   );

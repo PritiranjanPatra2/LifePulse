@@ -19,6 +19,7 @@ import {
 import { ROUTES } from '../../constants/routes';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../store/authSlice';
+import { PWAInstallButton } from '../common/PWAInstallButton';
 
 export const Sidebar = ({ isOpen, onClose }) => {
   const dispatch = useDispatch();
@@ -130,6 +131,11 @@ export const Sidebar = ({ isOpen, onClose }) => {
               )}
             </NavLink>
           ))}
+        </div>
+
+        {/* PWA Install Card */}
+        <div className="px-4 pb-3">
+          <PWAInstallButton variant="sidebar" />
         </div>
 
         {/* User Card & Logout Footer */}
