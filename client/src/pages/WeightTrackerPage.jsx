@@ -8,6 +8,7 @@ import { weightService } from '../services/weightService';
 import { goalService } from '../services/goalService';
 import { Scale, Plus, Target, TrendingDown, Trash2, Settings } from 'lucide-react';
 import { Modal } from '../components/common/Modal';
+import { WeightScaleVisual } from '../components/weight/WeightScaleVisual';
 
 export const WeightTrackerPage = () => {
   const { selectedDate } = useSelector((state) => state.date);
@@ -164,71 +165,84 @@ export const WeightTrackerPage = () => {
         </Button>
       </div>
 
-      {/* 4 SUMMARY METRIC CARDS */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card hover padding="p-5">
-          <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">
-            Current Weight
-          </span>
-          <div className="flex items-baseline gap-1">
-            <span className="text-3xl font-black text-slate-900 dark:text-white">
-              {currentWeight}
-            </span>
-            <span className="text-xs text-slate-400 font-semibold">kg</span>
-          </div>
-          <span className="text-[11px] text-slate-400 mt-2 block">
-            BMI: {summary?.bmi || 23.5}
-          </span>
-        </Card>
+      {/* HERO SECTION: SIGNATURE WEIGHT SCALE & SUMMARY METRICS */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+        <div className="lg:col-span-5 flex justify-center">
+          <Card padding="p-6" className="w-full flex items-center justify-center">
+            <WeightScaleVisual
+              currentWeight={currentWeight}
+              startingWeight={startingWeight}
+              targetWeight={targetWeight}
+              heightCm={summary?.heightCm || 175}
+            />
+          </Card>
+        </div>
 
-        <Card hover padding="p-5">
-          <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">
-            Starting Weight
-          </span>
-          <div className="flex items-baseline gap-1">
-            <span className="text-3xl font-black text-slate-900 dark:text-white">
-              {startingWeight}
+        <div className="lg:col-span-7 grid grid-cols-2 gap-4">
+          <Card hover padding="p-4 sm:p-5" className="flex flex-col justify-center">
+            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">
+              Current Weight
             </span>
-            <span className="text-xs text-slate-400 font-semibold">kg</span>
-          </div>
-          <span className="text-[11px] text-slate-400 mt-2 block">
-            Baseline benchmark
-          </span>
-        </Card>
+            <div className="flex items-baseline gap-1">
+              <span className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
+                {currentWeight}
+              </span>
+              <span className="text-xs text-slate-400 font-semibold">kg</span>
+            </div>
+            <span className="text-[11px] text-slate-400 mt-2 block">
+              BMI: {summary?.bmi || 23.5}
+            </span>
+          </Card>
 
-        <Card hover padding="p-5">
-          <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">
-            Total Change
-          </span>
-          <div className="flex items-baseline gap-1">
-            <span
-              className={`text-3xl font-black ${
-                totalChange <= 0 ? 'text-emerald-500' : 'text-amber-500'
-              }`}
-            >
-              {totalChange > 0 ? `+${totalChange}` : totalChange}
+          <Card hover padding="p-4 sm:p-5" className="flex flex-col justify-center">
+            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">
+              Starting Weight
             </span>
-            <span className="text-xs text-slate-400 font-semibold">kg</span>
-          </div>
-          <span className="text-[11px] text-slate-400 mt-2 block">
-            Net change from start
-          </span>
-        </Card>
+            <div className="flex items-baseline gap-1">
+              <span className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
+                {startingWeight}
+              </span>
+              <span className="text-xs text-slate-400 font-semibold">kg</span>
+            </div>
+            <span className="text-[11px] text-slate-400 mt-2 block">
+              Baseline benchmark
+            </span>
+          </Card>
 
-        <Card hover padding="p-5">
-          <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">
-            Target Weight
-          </span>
-          <div className="flex items-baseline gap-1">
-            <span className="text-3xl font-black text-purple-500">
-              {targetWeight}
+          <Card hover padding="p-4 sm:p-5" className="flex flex-col justify-center">
+            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">
+              Total Change
             </span>
-            <span className="text-xs text-slate-400 font-semibold">kg</span>
-          </div>
-          <span className="text-[11px] text-purple-400 mt-2 block font-semibold">
-            {remainingTarget > 0 ? `${remainingTarget} kg remaining` : 'Target Achieved! 🏆'}
-          </span>
-        </Card>
+            <div className="flex items-baseline gap-1">
+              <span
+                className={`text-2xl sm:text-3xl font-black ${
+                  totalChange <= 0 ? 'text-emerald-500' : 'text-amber-500'
+                }`}
+              >
+                {totalChange > 0 ? `+${totalChange}` : totalChange}
+              </span>
+              <span className="text-xs text-slate-400 font-semibold">kg</span>
+            </div>
+            <span className="text-[11px] text-slate-400 mt-2 block">
+              Net change from start
+            </span>
+          </Card>
+
+          <Card hover padding="p-4 sm:p-5" className="flex flex-col justify-center">
+            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">
+              Target Weight
+            </span>
+            <div className="flex items-baseline gap-1">
+              <span className="text-2xl sm:text-3xl font-black text-purple-500">
+                {targetWeight}
+              </span>
+              <span className="text-xs text-slate-400 font-semibold">kg</span>
+            </div>
+            <span className="text-[11px] text-purple-400 mt-2 block font-semibold">
+              {remainingTarget > 0 ? `${remainingTarget} kg remaining` : 'Target Achieved! 🏆'}
+            </span>
+          </Card>
+        </div>
       </div>
 
       {/* WEIGHT PROGRESSION LINE CHART */}

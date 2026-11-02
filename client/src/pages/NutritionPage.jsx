@@ -12,6 +12,7 @@ import { MEAL_CATEGORIES } from '../constants/emojis';
 import { mealService } from '../services/mealService';
 import { goalService } from '../services/goalService';
 import { UtensilsCrossed, Plus, Sparkles, PieChart, Flame } from 'lucide-react';
+import { NutritionPlateVisual } from '../components/nutrition/NutritionPlateVisual';
 
 export const NutritionPage = () => {
   const { selectedDate } = useSelector((state) => state.date);
@@ -167,61 +168,77 @@ export const NutritionPage = () => {
         </Button>
       </div>
 
-      {/* DAILY NUTRITION SCORECARD */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card
-          title="Daily Calorie Budget"
-          subtitle={`${selectedDate}`}
-          icon={Flame}
-          className="flex flex-col justify-between"
-        >
-          <div className="space-y-4">
-            <div className="flex items-baseline justify-between">
-              <div>
-                <span className="text-3xl font-black text-slate-900 dark:text-white">
-                  {totalCalories}
-                </span>
-                <span className="text-xs text-slate-400 font-semibold ml-1">
-                  / {targetCalories} kcal
+      {/* HERO SECTION: SIGNATURE NUTRITION PLATE & MACRONUTRIENT BALANCE */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+        <div className="lg:col-span-5 flex justify-center">
+          <Card padding="p-6" className="w-full flex items-center justify-center">
+            <NutritionPlateVisual
+              caloriesConsumed={totalCalories}
+              caloriesTarget={targetCalories}
+              proteinGrams={totalProtein}
+              proteinTarget={targetProtein}
+              carbsGrams={totalCarbs}
+              carbsTarget={targetCarbs}
+              fatGrams={totalFat}
+              fatTarget={targetFat}
+              mealsCount={meals.length}
+            />
+          </Card>
+        </div>
+
+        <div className="lg:col-span-7 flex flex-col justify-between gap-4">
+          <Card
+            title="Daily Calorie Budget"
+            subtitle={`${selectedDate}`}
+            icon={Flame}
+          >
+            <div className="space-y-3">
+              <div className="flex items-baseline justify-between">
+                <div>
+                  <span className="text-3xl font-black text-slate-900 dark:text-white">
+                    {totalCalories}
+                  </span>
+                  <span className="text-xs text-slate-400 font-semibold ml-1">
+                    / {targetCalories} kcal
+                  </span>
+                </div>
+                <span className="text-sm font-extrabold text-brand-600 dark:text-brand-400">
+                  {Math.min(Math.round((totalCalories / targetCalories) * 100), 100)}%
                 </span>
               </div>
-              <span className="text-sm font-extrabold text-brand-600 dark:text-brand-400">
-                {Math.min(Math.round((totalCalories / targetCalories) * 100), 100)}%
-              </span>
-            </div>
 
-            <div className="h-2.5 w-full rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
-              <div
-                style={{
-                  width: `${Math.min((totalCalories / targetCalories) * 100, 100)}%`,
-                }}
-                className="h-full bg-brand-500 rounded-full"
-              />
-            </div>
+              <div className="h-2.5 w-full rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+                <div
+                  style={{
+                    width: `${Math.min((totalCalories / targetCalories) * 100, 100)}%`,
+                  }}
+                  className="h-full bg-brand-500 rounded-full"
+                />
+              </div>
 
-            <div className="flex items-center justify-between text-xs text-slate-500 pt-1">
-              <span>Remaining: {Math.max(targetCalories - totalCalories, 0)} kcal</span>
-              <span>Meals logged: {meals.length}</span>
+              <div className="flex items-center justify-between text-xs text-slate-500 pt-1">
+                <span>Remaining: {Math.max(targetCalories - totalCalories, 0)} kcal</span>
+                <span>Meals logged: {meals.length}</span>
+              </div>
             </div>
-          </div>
-        </Card>
+          </Card>
 
-        {/* Macronutrient Balance Bar Card */}
-        <Card
-          title="Macronutrient Balance"
-          subtitle="Protein • Carbs • Healthy Fats"
-          icon={UtensilsCrossed}
-          className="lg:col-span-2"
-        >
-          <MacroNutrientBar
-            protein={totalProtein}
-            carbs={totalCarbs}
-            fat={totalFat}
-            targetProtein={targetProtein}
-            targetCarbs={targetCarbs}
-            targetFat={targetFat}
-          />
-        </Card>
+          <Card
+            title="Macronutrient Balance"
+            subtitle="Protein • Carbs • Healthy Fats"
+            icon={UtensilsCrossed}
+            className="flex-1"
+          >
+            <MacroNutrientBar
+              protein={totalProtein}
+              carbs={totalCarbs}
+              fat={totalFat}
+              targetProtein={targetProtein}
+              targetCarbs={targetCarbs}
+              targetFat={targetFat}
+            />
+          </Card>
+        </div>
       </div>
 
       {/* MEALS CATEGORIES GRID */}

@@ -38,8 +38,10 @@ export const Navbar = ({ onOpenSidebar, onOpenQuickAdd }) => {
   const [showNotifications, setShowNotifications] = useState(false);
   const notifRef = useRef(null);
 
-  // Format date for display: "Sun, Nov 1, 2026" on desktop, clean compact on mobile
-  const dateObj = new Date(selectedDate);
+  // Format date for display: "Sun, Nov 1, 2026" on desktop, sleek single-line on mobile
+  const [year, month, day] = (selectedDate || '').split('-').map(Number);
+  const dateObj = (year && month && day) ? new Date(year, month - 1, day) : new Date();
+
   const formattedDisplayDate = dateObj.toLocaleDateString('en-US', {
     weekday: 'short',
     month: 'short',
@@ -47,12 +49,12 @@ export const Navbar = ({ onOpenSidebar, onOpenQuickAdd }) => {
     year: 'numeric',
   });
 
-  const mobileDisplayDate = dateObj.toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-  });
+  const todayStr = new Date().toISOString().split('T')[0];
+  const isToday = selectedDate === todayStr;
 
-  const isToday = selectedDate === new Date().toISOString().split('T')[0];
+  const mobileDisplayDate = isToday
+    ? `Today, ${dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
+    : dateObj.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
 
   // Storage key isolated per user
   const storageKey = `lifepulse_notifications_${user?._id || 'guest'}`;
@@ -228,21 +230,24 @@ export const Navbar = ({ onOpenSidebar, onOpenQuickAdd }) => {
         </button>
 
         {/* Date Selector Group */}
-        <div className="flex items-center bg-slate-100/90 dark:bg-slate-800/90 p-0.5 sm:p-1 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 shadow-xs shrink-0">
+        <div className="flex items-center bg-slate-100/90 dark:bg-slate-800/90 p-0.5 sm:p-1 rounded-full sm:rounded-2xl border border-slate-200/80 dark:border-slate-700/80 shadow-xs shrink-0">
           <button
             onClick={() => dispatch(goToPreviousDay())}
             title="Previous Day"
-            className="p-1 sm:p-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 transition-all shrink-0"
+            className="p-1 sm:p-1.5 rounded-full sm:rounded-xl text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 active:scale-90 transition-all shrink-0"
           >
             <ChevronLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
 
-          <label className="relative flex items-center gap-1 sm:gap-2 px-1.5 sm:px-3 py-1 cursor-pointer select-none">
+          <label className="relative flex items-center gap-1.5 sm:gap-2 px-1.5 sm:px-3 py-0.5 sm:py-1 cursor-pointer select-none">
             <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-brand-500 shrink-0" />
             
-            {/* Mobile compact single-line label */}
-            <span className="sm:hidden text-xs font-bold text-slate-800 dark:text-slate-100 whitespace-nowrap">
-              {isToday ? 'Today' : mobileDisplayDate}
+            {/* Mobile compact single-line label with sleek pulsating dot for Today */}
+            <span className="sm:hidden flex items-center gap-1 text-[11px] font-bold text-slate-800 dark:text-slate-100 whitespace-nowrap">
+              {isToday && (
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+              )}
+              {mobileDisplayDate}
             </span>
 
             {/* Desktop full label */}
@@ -264,7 +269,7 @@ export const Navbar = ({ onOpenSidebar, onOpenQuickAdd }) => {
           <button
             onClick={() => dispatch(goToNextDay())}
             title="Next Day"
-            className="p-1 sm:p-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 transition-all shrink-0"
+            className="p-1 sm:p-1.5 rounded-full sm:rounded-xl text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 active:scale-90 transition-all shrink-0"
           >
             <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>

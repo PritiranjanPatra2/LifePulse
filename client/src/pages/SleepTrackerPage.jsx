@@ -6,6 +6,7 @@ import { notifyToast } from '../components/common/Toast';
 import { SleepAreaChart } from '../components/charts/SleepAreaChart';
 import { sleepService } from '../services/sleepService';
 import { goalService } from '../services/goalService';
+import { SleepMoonVisual } from '../components/sleep/SleepMoonVisual';
 import { Moon, Save, Sparkles, Clock, CheckCircle2, Star } from 'lucide-react';
 
 export const SleepTrackerPage = () => {
@@ -118,49 +119,65 @@ export const SleepTrackerPage = () => {
         </p>
       </div>
 
-      {/* STATS OVERVIEW */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Card hover padding="p-5">
-          <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">
-            Recorded Sleep
-          </span>
-          <div className="flex items-baseline gap-1.5">
-            <span className="text-3xl font-black text-indigo-500">
-              {durationHours}
+      {/* HERO SECTION: SIGNATURE SLEEP MOON & STATS */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+        <div className="lg:col-span-5 flex justify-center">
+          <Card padding="p-6" className="w-full flex items-center justify-center">
+            <SleepMoonVisual
+              durationHours={durationHours}
+              targetHours={targetHours}
+              quality={currentSleep?.quality || quality}
+              bedtime={currentSleep?.bedtime || bedtime}
+              wakeTime={currentSleep?.wakeTime || wakeTime}
+            />
+          </Card>
+        </div>
+
+        <div className="lg:col-span-7 flex flex-col justify-between gap-4">
+          <Card hover padding="p-5" className="flex-1 flex flex-col justify-center">
+            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">
+              Recorded Sleep
             </span>
-            <span className="text-xs text-slate-400 font-semibold">
-              / {targetHours} hrs target
+            <div className="flex items-baseline gap-1.5">
+              <span className="text-3xl font-black text-indigo-500">
+                {durationHours}
+              </span>
+              <span className="text-xs text-slate-400 font-semibold">
+                / {targetHours} hrs target
+              </span>
+            </div>
+            <span className="text-[11px] text-slate-400 mt-2 block">
+              {durationHours >= targetHours ? 'Target achieved! ✨' : `${Math.round((targetHours - durationHours) * 10) / 10}h below target`}
             </span>
+          </Card>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-1">
+            <Card hover padding="p-5" className="flex flex-col justify-center">
+              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">
+                Sleep Quality
+              </span>
+              <span className="text-2xl font-black text-slate-900 dark:text-white capitalize flex items-center gap-2">
+                {currentSleep?.quality || 'Good'}
+                <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
+              </span>
+              <span className="text-[11px] text-slate-400 mt-2 block">
+                Subjective restorative score
+              </span>
+            </Card>
+
+            <Card hover padding="p-5" className="flex flex-col justify-center">
+              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">
+                Schedule Interval
+              </span>
+              <span className="text-base sm:text-lg font-bold text-slate-800 dark:text-slate-200">
+                {currentSleep ? `${currentSleep.bedtime} → ${currentSleep.wakeTime}` : '23:00 → 07:00'}
+              </span>
+              <span className="text-[11px] text-slate-400 mt-2 block">
+                Crosses midnight verified
+              </span>
+            </Card>
           </div>
-          <span className="text-[11px] text-slate-400 mt-2 block">
-            {durationHours >= targetHours ? 'Target achieved! ✨' : `${Math.round((targetHours - durationHours) * 10) / 10}h below target`}
-          </span>
-        </Card>
-
-        <Card hover padding="p-5">
-          <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">
-            Sleep Quality
-          </span>
-          <span className="text-2xl font-black text-slate-900 dark:text-white capitalize flex items-center gap-2">
-            {currentSleep?.quality || 'Good'}
-            <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
-          </span>
-          <span className="text-[11px] text-slate-400 mt-2 block">
-            Subjective restorative score
-          </span>
-        </Card>
-
-        <Card hover padding="p-5">
-          <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">
-            Schedule Interval
-          </span>
-          <span className="text-lg font-bold text-slate-800 dark:text-slate-200">
-            {currentSleep ? `${currentSleep.bedtime} → ${currentSleep.wakeTime}` : '23:00 → 07:00'}
-          </span>
-          <span className="text-[11px] text-slate-400 mt-2 block">
-            Crosses midnight calculation verified
-          </span>
-        </Card>
+        </div>
       </div>
 
       {/* SLEEP LOG FORM & 7-DAY RECOVERY CHART */}

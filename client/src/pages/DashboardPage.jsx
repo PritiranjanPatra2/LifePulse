@@ -6,6 +6,11 @@ import { Button } from '../components/common/Button';
 import { CardSkeleton } from '../components/common/Skeleton';
 import { EmptyState } from '../components/common/EmptyState';
 import { WaterBottle } from '../components/hydration/WaterBottle';
+import { StepsTrackerVisual } from '../components/fitness/StepsTrackerVisual';
+import { WorkoutFlameVisual } from '../components/fitness/WorkoutFlameVisual';
+import { SleepMoonVisual } from '../components/sleep/SleepMoonVisual';
+import { WeightScaleVisual } from '../components/weight/WeightScaleVisual';
+import { NutritionPlateVisual } from '../components/nutrition/NutritionPlateVisual';
 import { MacroNutrientBar } from '../components/nutrition/MacroNutrientBar';
 import { StepsBarChart } from '../components/charts/StepsBarChart';
 import { CalorieBarChart } from '../components/charts/CalorieBarChart';
@@ -35,6 +40,17 @@ export const DashboardPage = () => {
 
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [activeVisualTab, setActiveVisualTab] = useState('water');
+
+  const visualTabs = [
+    { id: 'water', label: '💧 Water', route: ROUTES.HYDRATION, name: 'Water Bottle' },
+    { id: 'steps', label: '🚶 Steps', route: ROUTES.DAILY_TRACKER, name: 'Steps Track' },
+    { id: 'workout', label: '🔥 Workout', route: ROUTES.FITNESS, name: 'Workout Flame' },
+    { id: 'sleep', label: '🌙 Sleep', route: ROUTES.SLEEP, name: 'Sleep Moon' },
+    { id: 'nutrition', label: '🥗 Nutrition', route: ROUTES.NUTRITION, name: 'Macro Plate' },
+    { id: 'weight', label: '⚖️ Weight', route: ROUTES.WEIGHT, name: 'Smart Scale' },
+  ];
+  const activeTabMeta = visualTabs.find((t) => t.id === activeVisualTab) || visualTabs[0];
 
   const loadDashboard = async () => {
     setIsLoading(true);
@@ -395,27 +411,87 @@ export const DashboardPage = () => {
         </Card>
       </div>
 
-      {/* SIGNATURE ANIMATED WATER TRACKER & NUTRITION BREAKDOWN */}
+      {/* SIGNATURE ANIMATED HEALTH HUB & NUTRITION BREAKDOWN */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Animated Water Bottle Card */}
+        {/* Animated Health Visual Showcase Card */}
         <Card
-          title="Daily Hydration Bottle"
-          subtitle={`Target: ${(summaryCards.water?.target || 4000) / 1000} Litres`}
-          icon={Droplets}
+          title={`Pulse Visual: ${activeTabMeta.name}`}
+          subtitle="Signature live lifestyle animation"
+          icon={Sparkles}
           action={
-            <Link to={ROUTES.HYDRATION}>
+            <Link to={activeTabMeta.route}>
               <Button size="sm" variant="ghost" className="text-xs">
-                Log Water →
+                Open {activeTabMeta.id} →
               </Button>
             </Link>
           }
           className="lg:col-span-1 flex flex-col justify-between"
         >
-          <div className="py-2">
-            <WaterBottle
-              currentMl={summaryCards.water?.value || 0}
-              targetMl={summaryCards.water?.target || 4000}
-            />
+          {/* Interactive Visual Switcher Tabs */}
+          <div className="flex items-center gap-1 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl overflow-x-auto mb-2">
+            {visualTabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveVisualTab(tab.id)}
+                className={`px-2 py-1 rounded-lg text-[11px] font-bold whitespace-nowrap transition-all ${
+                  activeVisualTab === tab.id
+                    ? 'bg-brand-500 text-white shadow-xs'
+                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-900'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="py-2 flex items-center justify-center min-h-[300px]">
+            {activeVisualTab === 'water' && (
+              <WaterBottle
+                currentMl={summaryCards.water?.value || 0}
+                targetMl={summaryCards.water?.target || 4000}
+              />
+            )}
+            {activeVisualTab === 'steps' && (
+              <StepsTrackerVisual
+                currentSteps={summaryCards.steps?.value || 0}
+                targetSteps={summaryCards.steps?.target || 10000}
+              />
+            )}
+            {activeVisualTab === 'workout' && (
+              <WorkoutFlameVisual
+                currentMinutes={summaryCards.exercise?.value || 0}
+                targetMinutes={summaryCards.exercise?.target || 45}
+                caloriesBurned={summaryCards.exercise?.caloriesBurned || 0}
+                sessionCount={todayExercises.length}
+              />
+            )}
+            {activeVisualTab === 'sleep' && (
+              <SleepMoonVisual
+                durationHours={summaryCards.sleep?.value || 0}
+                targetHours={summaryCards.sleep?.target || 8}
+                quality={summaryCards.sleep?.quality || 'good'}
+              />
+            )}
+            {activeVisualTab === 'nutrition' && (
+              <NutritionPlateVisual
+                caloriesConsumed={nutritionSummary.calories || 0}
+                caloriesTarget={goal?.calories || 2200}
+                proteinGrams={nutritionSummary.protein || 0}
+                proteinTarget={goal?.proteinGrams || 80}
+                carbsGrams={nutritionSummary.carbs || 0}
+                carbsTarget={goal?.carbsGrams || 250}
+                fatGrams={nutritionSummary.fat || 0}
+                fatTarget={goal?.fatGrams || 65}
+                mealsCount={todayMeals.length}
+              />
+            )}
+            {activeVisualTab === 'weight' && (
+              <WeightScaleVisual
+                currentWeight={summaryCards.weight?.value || 70}
+                targetWeight={summaryCards.weight?.target || 68}
+                startingWeight={goal?.startingWeight || 72}
+              />
+            )}
           </div>
         </Card>
 

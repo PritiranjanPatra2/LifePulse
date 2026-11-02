@@ -7,6 +7,7 @@ import { ExerciseDonutChart } from '../components/charts/ExerciseDonutChart';
 import { EXERCISE_CATEGORIES } from '../constants/emojis';
 import { exerciseService } from '../services/exerciseService';
 import { goalService } from '../services/goalService';
+import { WorkoutFlameVisual } from '../components/fitness/WorkoutFlameVisual';
 import {
   Dumbbell,
   Plus,
@@ -152,66 +153,79 @@ export const FitnessPage = () => {
         </p>
       </div>
 
-      {/* 4 STATS CARDS */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card hover padding="p-4 sm:p-5">
-          <div className="flex items-center gap-2 text-rose-500 mb-2">
-            <Timer className="w-4 h-4" />
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
-              Today's Duration
-            </span>
-          </div>
-          <div className="flex items-baseline gap-1">
-            <span className="text-2xl font-black text-slate-900 dark:text-white">
-              {totalMinutesToday}
-            </span>
-            <span className="text-xs text-slate-400">/ {targetMinutes} mins</span>
-          </div>
-        </Card>
+      {/* HERO SECTION: SIGNATURE WORKOUT FLAME & STATS CARDS */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+        <div className="lg:col-span-5 flex justify-center">
+          <Card padding="p-6" className="w-full flex items-center justify-center">
+            <WorkoutFlameVisual
+              currentMinutes={totalMinutesToday}
+              targetMinutes={targetMinutes}
+              caloriesBurned={totalCaloriesToday}
+              sessionCount={exercises.length}
+            />
+          </Card>
+        </div>
 
-        <Card hover padding="p-4 sm:p-5">
-          <div className="flex items-center gap-2 text-amber-500 mb-2">
-            <Flame className="w-4 h-4" />
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
-              Burn Estimate
-            </span>
-          </div>
-          <div className="flex items-baseline gap-1">
-            <span className="text-2xl font-black text-slate-900 dark:text-white">
-              ~{totalCaloriesToday}
-            </span>
-            <span className="text-xs text-slate-400">kcal</span>
-          </div>
-        </Card>
+        <div className="lg:col-span-7 grid grid-cols-2 gap-4">
+          <Card hover padding="p-4 sm:p-5" className="flex flex-col justify-center">
+            <div className="flex items-center gap-2 text-rose-500 mb-2">
+              <Timer className="w-4 h-4" />
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                Today's Duration
+              </span>
+            </div>
+            <div className="flex items-baseline gap-1">
+              <span className="text-2xl font-black text-slate-900 dark:text-white">
+                {totalMinutesToday}
+              </span>
+              <span className="text-xs text-slate-400">/ {targetMinutes} mins</span>
+            </div>
+          </Card>
 
-        <Card hover padding="p-4 sm:p-5">
-          <div className="flex items-center gap-2 text-blue-500 mb-2">
-            <Dumbbell className="w-4 h-4" />
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
-              Total Sessions
-            </span>
-          </div>
-          <div className="flex items-baseline gap-1">
-            <span className="text-2xl font-black text-slate-900 dark:text-white">
-              {allHistory.length}
-            </span>
-            <span className="text-xs text-slate-400">logged</span>
-          </div>
-        </Card>
+          <Card hover padding="p-4 sm:p-5" className="flex flex-col justify-center">
+            <div className="flex items-center gap-2 text-amber-500 mb-2">
+              <Flame className="w-4 h-4" />
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                Burn Estimate
+              </span>
+            </div>
+            <div className="flex items-baseline gap-1">
+              <span className="text-2xl font-black text-slate-900 dark:text-white">
+                ~{totalCaloriesToday}
+              </span>
+              <span className="text-xs text-slate-400">kcal</span>
+            </div>
+          </Card>
 
-        <Card hover padding="p-4 sm:p-5">
-          <div className="flex items-center gap-2 text-emerald-500 mb-2">
-            <Award className="w-4 h-4" />
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
-              Top Activity
-            </span>
-          </div>
-          <div className="flex items-baseline gap-1">
-            <span className="text-lg font-black text-slate-900 dark:text-white truncate">
-              {mostFrequentActivity}
-            </span>
-          </div>
-        </Card>
+          <Card hover padding="p-4 sm:p-5" className="flex flex-col justify-center">
+            <div className="flex items-center gap-2 text-blue-500 mb-2">
+              <Dumbbell className="w-4 h-4" />
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                Total Sessions
+              </span>
+            </div>
+            <div className="flex items-baseline gap-1">
+              <span className="text-2xl font-black text-slate-900 dark:text-white">
+                {allHistory.length}
+              </span>
+              <span className="text-xs text-slate-400">logged</span>
+            </div>
+          </Card>
+
+          <Card hover padding="p-4 sm:p-5" className="flex flex-col justify-center">
+            <div className="flex items-center gap-2 text-emerald-500 mb-2">
+              <Award className="w-4 h-4" />
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                Top Activity
+              </span>
+            </div>
+            <div className="flex items-baseline gap-1">
+              <span className="text-lg font-black text-slate-900 dark:text-white truncate">
+                {mostFrequentActivity}
+              </span>
+            </div>
+          </Card>
+        </div>
       </div>
 
       {/* LOGGING FORM & TODAY'S SESSIONS */}

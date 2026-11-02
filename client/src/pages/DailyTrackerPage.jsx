@@ -28,6 +28,11 @@ import {
   Check,
   CheckCircle2,
 } from 'lucide-react';
+import { StepsTrackerVisual } from '../components/fitness/StepsTrackerVisual';
+import { WorkoutFlameVisual } from '../components/fitness/WorkoutFlameVisual';
+import { SleepMoonVisual } from '../components/sleep/SleepMoonVisual';
+import { WeightScaleVisual } from '../components/weight/WeightScaleVisual';
+import { NutritionPlateVisual } from '../components/nutrition/NutritionPlateVisual';
 
 export const DailyTrackerPage = () => {
   const { selectedDate } = useSelector((state) => state.date);
@@ -398,6 +403,26 @@ export const DailyTrackerPage = () => {
     { id: 'weight', label: 'Weight' },
   ];
 
+  // Calculate live daily totals for animated visual components
+  const totalCaloriesToday = meals.reduce(
+    (sum, m) => sum + (m.items || []).reduce((s, it) => s + (it.calories || 0), 0),
+    0
+  );
+  const totalProteinToday = meals.reduce(
+    (sum, m) => sum + (m.items || []).reduce((s, it) => s + (it.protein || 0), 0),
+    0
+  );
+  const totalCarbsToday = meals.reduce(
+    (sum, m) => sum + (m.items || []).reduce((s, it) => s + (it.carbs || 0), 0),
+    0
+  );
+  const totalFatToday = meals.reduce(
+    (sum, m) => sum + (m.items || []).reduce((s, it) => s + (it.fat || 0), 0),
+    0
+  );
+  const totalExerciseMins = exercises.reduce((sum, e) => sum + e.durationMinutes, 0);
+  const totalExCalories = exercises.reduce((sum, e) => sum + (e.caloriesBurned || 0), 0);
+
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
       {/* Header */}
@@ -441,25 +466,42 @@ export const DailyTrackerPage = () => {
                 Food & Meals
               </h2>
             </div>
-            <span className="text-xs text-slate-400 font-medium">
-              Emoji-based searchable food library
+            <span className="text-xs font-bold text-amber-500">
+              Total: {totalCaloriesToday.toLocaleString()} / 2,200 kcal ({meals.length} meals logged)
             </span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {MEAL_CATEGORIES.map((cat) => {
-              const matchedMeal = meals.find((m) => m.category === cat.name);
-              return (
-                <MealCard
-                  key={cat.id}
-                  category={cat}
-                  meal={matchedMeal}
-                  onOpenAddFood={handleOpenAddFood}
-                  onRemoveItem={handleRemoveMealItem}
-                  onDeleteMeal={handleDeleteMeal}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            {/* Animated Macro Plate Visual */}
+            <div className="lg:col-span-4 flex justify-center">
+              <Card padding="p-5" className="w-full flex items-center justify-center">
+                <NutritionPlateVisual
+                  caloriesConsumed={totalCaloriesToday}
+                  caloriesTarget={2200}
+                  proteinGrams={totalProteinToday}
+                  carbsGrams={totalCarbsToday}
+                  fatGrams={totalFatToday}
+                  mealsCount={meals.length}
                 />
-              );
-            })}
+              </Card>
+            </div>
+
+            {/* 6 Meal Category Cards */}
+            <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {MEAL_CATEGORIES.map((cat) => {
+                const matchedMeal = meals.find((m) => m.category === cat.name);
+                return (
+                  <MealCard
+                    key={cat.id}
+                    category={cat}
+                    meal={matchedMeal}
+                    onOpenAddFood={handleOpenAddFood}
+                    onRemoveItem={handleRemoveMealItem}
+                    onDeleteMeal={handleDeleteMeal}
+                  />
+                );
+              })}
+            </div>
           </div>
         </section>
       )}
@@ -513,14 +555,26 @@ export const DailyTrackerPage = () => {
                 Physical Fitness & Exercise
               </h2>
             </div>
-            <span className="text-xs text-slate-400 font-medium">
-              {exercises.length} sessions logged
+            <span className="text-xs font-bold text-rose-500">
+              Total: {totalExerciseMins} mins ({totalExCalories} kcal burned)
             </span>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            {/* Animated Workout Flame Visual */}
+            <div className="lg:col-span-4 flex justify-center">
+              <Card padding="p-5" className="w-full flex items-center justify-center">
+                <WorkoutFlameVisual
+                  currentMinutes={totalExerciseMins}
+                  targetMinutes={45}
+                  caloriesBurned={totalExCalories}
+                  sessionCount={exercises.length}
+                />
+              </Card>
+            </div>
+
             {/* Exercise Form */}
-            <Card title="Log Exercise Session" subtitle="Record physical workout" icon={Dumbbell}>
+            <Card title="Log Exercise Session" subtitle="Record physical workout" icon={Dumbbell} className="lg:col-span-4">
               <form onSubmit={handleAddExercise} className="space-y-3">
                 <div>
                   <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
@@ -580,8 +634,9 @@ export const DailyTrackerPage = () => {
             {/* Exercise List */}
             <Card
               title="Today's Workouts"
-              subtitle={`${exercises.reduce((s, e) => s + e.durationMinutes, 0)} total minutes`}
+              subtitle={`${totalExerciseMins} total minutes`}
               icon={Dumbbell}
+              className="lg:col-span-4"
             >
               {exercises.length > 0 ? (
                 <div className="space-y-2.5 max-h-[280px] overflow-y-auto pr-1">
@@ -635,174 +690,194 @@ export const DailyTrackerPage = () => {
             </h2>
           </div>
 
-          <Card padding="p-6">
-            <form onSubmit={handleSaveDailyLog} className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            {/* Animated Steps Tracker Visual */}
+            <div className="lg:col-span-5 flex justify-center">
+              <Card padding="p-6" className="w-full flex items-center justify-center">
+                <StepsTrackerVisual
+                  currentSteps={Number(stepsInput) || 0}
+                  targetSteps={10000}
+                />
+              </Card>
+            </div>
+
+            {/* Steps & Journal Notes Form */}
+            <Card padding="p-6" className="lg:col-span-7">
+              <form onSubmit={handleSaveDailyLog} className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
+                      Daily Steps Walked
+                    </label>
+                    <input
+                      type="number"
+                      value={stepsInput}
+                      onChange={(e) => setStepsInput(e.target.value)}
+                      className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-sm outline-none focus:ring-2 focus:ring-brand-500"
+                    />
+                    <span className="text-[11px] text-slate-400 mt-1 block">
+                      Estimated distance: ~
+                      {Math.round(((Number(stepsInput) * 75) / 100000) * 100) / 100} km
+                    </span>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
+                      Overall Mood / Energy
+                    </label>
+                    <select
+                      value={moodInput}
+                      onChange={(e) => setMoodInput(e.target.value)}
+                      className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-sm outline-none focus:ring-2 focus:ring-brand-500"
+                    >
+                      <option value="great">Great 🌟 (High Energy)</option>
+                      <option value="good">Good 😊 (Balanced)</option>
+                      <option value="neutral">Neutral 😐 (Moderate)</option>
+                      <option value="tired">Tired 😴 (Low Energy)</option>
+                      <option value="stressed">Stressed 😣 (Rest Needed)</option>
+                    </select>
+                  </div>
+                </div>
+
                 <div>
                   <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
-                    Daily Steps Walked
+                    Daily Reflections & Journal Notes
                   </label>
-                  <input
-                    type="number"
-                    value={stepsInput}
-                    onChange={(e) => setStepsInput(e.target.value)}
+                  <textarea
+                    rows={3}
+                    value={notesInput}
+                    onChange={(e) => setNotesInput(e.target.value)}
+                    placeholder="How did today feel? Any diet or training notes?"
                     className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-sm outline-none focus:ring-2 focus:ring-brand-500"
                   />
-                  <span className="text-[11px] text-slate-400 mt-1 block">
-                    Estimated distance: ~
-                    {Math.round(((Number(stepsInput) * 75) / 100000) * 100) / 100} km
-                  </span>
                 </div>
 
-                <div>
-                  <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
-                    Overall Mood / Energy
-                  </label>
-                  <select
-                    value={moodInput}
-                    onChange={(e) => setMoodInput(e.target.value)}
-                    className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-sm outline-none focus:ring-2 focus:ring-brand-500"
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
+                  {stepsSavedSuccess ? (
+                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-xs font-semibold animate-pulse">
+                      <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-500" />
+                      <span>{Number(stepsInput).toLocaleString()} steps saved successfully!</span>
+                    </div>
+                  ) : (
+                    <span className="text-xs text-slate-400">
+                      Auto-calculates distance & daily progress
+                    </span>
+                  )}
+                  <Button
+                    type="submit"
+                    size="sm"
+                    isLoading={isSavingDailyLog}
+                    icon={stepsSavedSuccess ? Check : Save}
+                    className={stepsSavedSuccess ? '!bg-emerald-600 hover:!bg-emerald-500 text-white' : ''}
                   >
-                    <option value="great">Great 🌟 (High Energy)</option>
-                    <option value="good">Good 😊 (Balanced)</option>
-                    <option value="neutral">Neutral 😐 (Moderate)</option>
-                    <option value="tired">Tired 😴 (Low Energy)</option>
-                    <option value="stressed">Stressed 😣 (Rest Needed)</option>
-                  </select>
+                    {stepsSavedSuccess ? 'Saved!' : 'Save Steps & Notes'}
+                  </Button>
                 </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
-                  Daily Reflections & Journal Notes
-                </label>
-                <textarea
-                  rows={3}
-                  value={notesInput}
-                  onChange={(e) => setNotesInput(e.target.value)}
-                  placeholder="How did today feel? Any diet or training notes?"
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-sm outline-none focus:ring-2 focus:ring-brand-500"
-                />
-              </div>
-
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
-                {stepsSavedSuccess ? (
-                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-xs font-semibold animate-pulse">
-                    <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-500" />
-                    <span>{Number(stepsInput).toLocaleString()} steps saved successfully!</span>
-                  </div>
-                ) : (
-                  <span className="text-xs text-slate-400">
-                    Auto-calculates distance & daily progress
-                  </span>
-                )}
-                <Button
-                  type="submit"
-                  size="sm"
-                  isLoading={isSavingDailyLog}
-                  icon={stepsSavedSuccess ? Check : Save}
-                  className={stepsSavedSuccess ? '!bg-emerald-600 hover:!bg-emerald-500 text-white' : ''}
-                >
-                  {stepsSavedSuccess ? 'Saved!' : 'Save Steps & Notes'}
-                </Button>
-              </div>
-            </form>
-          </Card>
+              </form>
+            </Card>
+          </div>
         </section>
       )}
 
       {/* SECTION 5: SLEEP & WEIGHT */}
       {(activeTab === 'all' || activeTab === 'sleep' || activeTab === 'weight') && (
-        <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
           {/* SLEEP CARD */}
           {(activeTab === 'all' || activeTab === 'sleep') && (
             <Card title="Sleep Tracker" subtitle="Bedtime & Wake-up calculation" icon={Moon}>
-              <form onSubmit={handleSaveSleep} className="space-y-4">
-                <div className="grid grid-cols-2 gap-3">
+              <div className="flex flex-col items-center gap-6">
+                <SleepMoonVisual
+                  durationMinutes={sleepLog?.durationMinutes || 480}
+                  targetHours={8}
+                  quality={sleepQuality}
+                  bedtime={bedtime}
+                  wakeTime={wakeTime}
+                />
+
+                <form onSubmit={handleSaveSleep} className="space-y-4 w-full pt-2 border-t border-slate-100 dark:border-slate-800">
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
+                        Bedtime
+                      </label>
+                      <input
+                        type="time"
+                        value={bedtime}
+                        onChange={(e) => setBedtime(e.target.value)}
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-sm outline-none focus:ring-2 focus:ring-indigo-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
+                        Wake Time
+                      </label>
+                      <input
+                        type="time"
+                        value={wakeTime}
+                        onChange={(e) => setWakeTime(e.target.value)}
+                        className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-sm outline-none focus:ring-2 focus:ring-indigo-500"
+                      />
+                    </div>
+                  </div>
+
                   <div>
                     <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
-                      Bedtime
+                      Sleep Quality
                     </label>
-                    <input
-                      type="time"
-                      value={bedtime}
-                      onChange={(e) => setBedtime(e.target.value)}
+                    <select
+                      value={sleepQuality}
+                      onChange={(e) => setSleepQuality(e.target.value)}
                       className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-sm outline-none focus:ring-2 focus:ring-indigo-500"
-                    />
+                    >
+                      <option value="excellent">Excellent 🌟</option>
+                      <option value="good">Good 😊</option>
+                      <option value="fair">Fair 😐</option>
+                      <option value="poor">Poor 😴</option>
+                    </select>
                   </div>
-                  <div>
-                    <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
-                      Wake Time
-                    </label>
-                    <input
-                      type="time"
-                      value={wakeTime}
-                      onChange={(e) => setWakeTime(e.target.value)}
-                      className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-sm outline-none focus:ring-2 focus:ring-indigo-500"
-                    />
-                  </div>
-                </div>
 
-                <div>
-                  <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
-                    Sleep Quality
-                  </label>
-                  <select
-                    value={sleepQuality}
-                    onChange={(e) => setSleepQuality(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-sm outline-none focus:ring-2 focus:ring-indigo-500"
-                  >
-                    <option value="excellent">Excellent 🌟</option>
-                    <option value="good">Good 😊</option>
-                    <option value="fair">Fair 😐</option>
-                    <option value="poor">Poor 😴</option>
-                  </select>
-                </div>
-
-                {sleepLog && (
-                  <div className="p-3 rounded-xl bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/40 flex items-center justify-between text-xs">
-                    <span className="font-semibold text-slate-700 dark:text-slate-300">
-                      Calculated Duration:
-                    </span>
-                    <span className="font-extrabold text-indigo-600 dark:text-indigo-400">
-                      {Math.round((sleepLog.durationMinutes / 60) * 10) / 10} hours
-                    </span>
-                  </div>
-                )}
-
-                <Button type="submit" size="sm" icon={Save} className="w-full">
-                  Update Sleep Record
-                </Button>
-              </form>
+                  <Button type="submit" size="sm" icon={Save} className="w-full">
+                    Update Sleep Record
+                  </Button>
+                </form>
+              </div>
             </Card>
           )}
 
           {/* WEIGHT CARD */}
           {(activeTab === 'all' || activeTab === 'weight') && (
             <Card title="Weight Measurement" subtitle="Record current bodyweight" icon={Scale}>
-              <form onSubmit={handleSaveWeight} className="space-y-4">
-                <div>
-                  <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
-                    Weight in Kilograms (kg)
-                  </label>
-                  <input
-                    type="number"
-                    step="0.1"
-                    placeholder="e.g. 71.5"
-                    value={weightKg}
-                    onChange={(e) => setWeightKg(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-sm outline-none focus:ring-2 focus:ring-purple-500"
-                  />
-                </div>
+              <div className="flex flex-col items-center gap-6">
+                <WeightScaleVisual
+                  currentWeight={Number(weightKg) || 70}
+                  startingWeight={72}
+                  targetWeight={68}
+                />
 
-                <div className="p-3 rounded-xl bg-purple-50/50 dark:bg-purple-950/30 border border-purple-100 dark:border-purple-900/40 text-xs text-slate-600 dark:text-slate-400">
-                  Consistent weigh-ins (ideally in the morning after waking up) yield the most reliable trend charts.
-                </div>
+                <form onSubmit={handleSaveWeight} className="space-y-4 w-full pt-2 border-t border-slate-100 dark:border-slate-800">
+                  <div>
+                    <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
+                      Weight in Kilograms (kg)
+                    </label>
+                    <input
+                      type="number"
+                      step="0.1"
+                      placeholder="e.g. 71.5"
+                      value={weightKg}
+                      onChange={(e) => setWeightKg(e.target.value)}
+                      className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-sm outline-none focus:ring-2 focus:ring-purple-500"
+                    />
+                  </div>
 
-                <Button type="submit" size="sm" icon={Save} className="w-full">
-                  Save Weight Entry
-                </Button>
-              </form>
+                  <div className="p-3 rounded-xl bg-purple-50/50 dark:bg-purple-950/30 border border-purple-100 dark:border-purple-900/40 text-xs text-slate-600 dark:text-slate-400">
+                    Consistent weigh-ins (ideally in the morning after waking up) yield the most reliable trend charts.
+                  </div>
+
+                  <Button type="submit" size="sm" icon={Save} className="w-full">
+                    Save Weight Entry
+                  </Button>
+                </form>
+              </div>
             </Card>
           )}
         </section>
