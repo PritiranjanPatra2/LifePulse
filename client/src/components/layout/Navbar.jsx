@@ -219,7 +219,7 @@ export const Navbar = ({ onOpenSidebar, onOpenQuickAdd }) => {
   };
 
   return (
-    <header className="sticky top-0 z-30 h-16 sm:h-18 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 px-2.5 sm:px-6 lg:px-8 flex items-center justify-between transition-colors">
+    <header className="sticky top-0 z-30 h-16 sm:h-18 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 px-2.5 sm:px-6 lg:px-8 flex items-center justify-between transition-colors app-drag">
       {/* Left: Mobile Menu Trigger + Date Navigator */}
       <div className="flex items-center gap-1.5 sm:gap-4 min-w-0">
         <button

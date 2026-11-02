@@ -1,6 +1,6 @@
 {
   "short_name": "LifePulse",
-  "name": "LifePulse – Personal Lifestyle Analytics Dashboard",
+  "name": "LifePulse",
   "description": "Track your daily food, water intake, exercise, walking steps, sleep, and lifestyle habits with real-time visual analytics.",
   "icons": [
     {
@@ -24,9 +24,13 @@
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone"
+  ],
   "orientation": "portrait-primary",
-  "theme_color": "#1ea678",
-  "background_color": "#080d1a",
+  "theme_color": "#0f172a",
+  "background_color": "#0b1120",
   "categories": ["health", "fitness", "lifestyle", "productivity"],
   "shortcuts": [
     {
