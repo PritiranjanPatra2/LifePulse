@@ -11,6 +11,7 @@ import { WorkoutFlameVisual } from '../components/fitness/WorkoutFlameVisual';
 import { SleepMoonVisual } from '../components/sleep/SleepMoonVisual';
 import { WeightScaleVisual } from '../components/weight/WeightScaleVisual';
 import { NutritionPlateVisual } from '../components/nutrition/NutritionPlateVisual';
+import { StudyPrepVisual } from '../components/study/StudyPrepVisual';
 import { MacroNutrientBar } from '../components/nutrition/MacroNutrientBar';
 import { StepsBarChart } from '../components/charts/StepsBarChart';
 import { CalorieBarChart } from '../components/charts/CalorieBarChart';
@@ -49,6 +50,7 @@ export const DashboardPage = () => {
     { id: 'sleep', label: '🌙 Sleep', route: ROUTES.SLEEP, name: 'Sleep Moon' },
     { id: 'nutrition', label: '🥗 Nutrition', route: ROUTES.NUTRITION, name: 'Macro Plate' },
     { id: 'weight', label: '⚖️ Weight', route: ROUTES.WEIGHT, name: 'Smart Scale' },
+    { id: 'study', label: '📚 Study', route: ROUTES.STUDY, name: 'Study Prep' },
   ];
   const activeTabMeta = visualTabs.find((t) => t.id === activeVisualTab) || visualTabs[0];
 
@@ -490,6 +492,15 @@ export const DashboardPage = () => {
                 currentWeight={summaryCards.weight?.value || 70}
                 targetWeight={summaryCards.weight?.target || 68}
                 startingWeight={goal?.startingWeight || 72}
+              />
+            )}
+            {activeVisualTab === 'study' && (
+              <StudyPrepVisual
+                overallProgress={0}
+                questionsSolved={0}
+                questionsTarget={5000}
+                completedChapters={0}
+                totalChapters={0}
               />
             )}
           </div>

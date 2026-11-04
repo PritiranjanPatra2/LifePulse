@@ -19,6 +19,7 @@ const goalRoutes = require('./routes/goalRoutes');
 const habitRoutes = require('./routes/habitRoutes');
 const analyticsRoutes = require('./routes/analyticsRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
+const studyRoutes = require('./routes/studyRoutes');
 
 const app = express();
 
@@ -76,6 +77,7 @@ app.use('/api/goals', goalRoutes);
 app.use('/api/habits', habitRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/study', studyRoutes); // Study & Preparation cascading tracking API
 
 // Serve compiled client in production or standalone run
 const clientDistPath = path.join(__dirname, '../client/dist');

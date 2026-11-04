@@ -21,6 +21,7 @@ import { WeightTrackerPage } from './pages/WeightTrackerPage';
 import { AnalyticsPage } from './pages/AnalyticsPage';
 import { ReportsPage } from './pages/ReportsPage';
 import { GoalsHabitsPage } from './pages/GoalsHabitsPage';
+import { StudyPrepPage } from './pages/StudyPrepPage';
 import { SettingsPage } from './pages/SettingsPage';
 
 // Protected Route Wrapper
@@ -137,6 +138,14 @@ export const App = () => {
           element={
             <ProtectedRoute>
               <GoalsHabitsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={ROUTES.STUDY}
+          element={
+            <ProtectedRoute>
+              <StudyPrepPage />
             </ProtectedRoute>
           }
         />

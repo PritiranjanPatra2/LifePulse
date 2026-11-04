@@ -4,6 +4,8 @@ const app = require('./app');
 const { connectDB } = require('./config/db');
 const { seedInitialFoods } = require('./utils/seed');
 
+// Server configuration & study routes enabled
+
 const PORT = process.env.PORT || 5000;
 
 const startServer = async () => {

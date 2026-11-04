@@ -11,6 +11,7 @@ import {
   BarChart3,
   FileDown,
   Target,
+  GraduationCap,
   Settings,
   Activity,
   LogOut,
@@ -36,6 +37,7 @@ export const Sidebar = ({ isOpen, onClose }) => {
     { name: 'Analytics', href: ROUTES.ANALYTICS, icon: BarChart3, badge: 'Power BI' },
     { name: 'Reports & Export', href: ROUTES.REPORTS, icon: FileDown },
     { name: 'Goals & Habits', href: ROUTES.GOALS, icon: Target },
+    { name: 'Study & Prep', href: ROUTES.STUDY, icon: GraduationCap, highlight: 'text-indigo-400', badge: 'New' },
     { name: 'Settings', href: ROUTES.SETTINGS, icon: Settings },
   ];
 
